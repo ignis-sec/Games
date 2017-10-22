@@ -43,6 +43,8 @@ var levelLength=level[curLevel][0][0];
 
 
 document.addEventListener("keypress", keyPressHandler,false);			//listener
+document.addEventListener("keydown", keyPressHandler2,false);
+	
 
 //////////////////////////////////////////////////////////////////////////
 window.onload = function()												//what to do at start
@@ -58,8 +60,20 @@ window.onload = function()												//what to do at start
 //////////////////////////////////////////////////////////////////////////
 function keyPressHandler(e)                                             //key handler
 {	
+
 	key=e.keyCode;														
-	if(keylast==key+4||keylast==key-4||keylast==key+3||keylast==key-3)	//if its the opposite of current direction, disregard keypress
+	if((keylast==key+2||keylast==key-2||keylast==key+4||keylast==key-4||keylast==key+3||keylast==key-3)||(key!=37)&&(key!=38)&&(key!=39)&&(key!=40)&&(key!=87)&&(key!=119)&&(key!=65)&&(key!=97)&&(key!=83)&&(key!=115)&&(key!=68)&&(key!=100))	//if its the opposite of current direction, disregard keypress
+	{
+		key=keylast;
+	}	
+}
+
+//////////////////////////////////////////////////////////////////////////
+function keyPressHandler2(e)                                             //key handler
+{	
+
+	key=e.keyCode;														
+	if((keylast==key+2||keylast==key-2)||(key!=37)&&(key!=38)&&(key!=39)&&(key!=40))	//if its the opposite of current direction, disregard keypress
 	{
 		key=keylast;
 	}	
@@ -93,19 +107,19 @@ function draw()															//main function
 //////////////////////////////////////////////////////////////////////////
 function handleMovement()												//check which key was pressed and which way should the snake go next tick
 {
-	if(key==87||key==119)
+	if(key==87||key==119||key==38)
 		{
 			y[0]-=32;
 			y[0]=(canvas.height+y[0])%canvas.height;
-		}else if(key==65||key==97)
+		}else if(key==65||key==97||key==37)
 		{
 			x[0]+=-32;
 			x[0]=(x[0]+canvas.width)%canvas.width;
-		}else if(key==83||key==115)
+		}else if(key==83||key==115||key==40)
 		{
 			y[0]+=32;
 			y[0]=y[0]%canvas.height;
-		}else if(key==68||key==100)
+		}else if(key==68||key==100||key==39)
 		{
 			x[0]+=32;
 			x[0]=x[0]%canvas.width;
