@@ -91,8 +91,8 @@ function draw()															//main function
 {
 	context.clearRect(0,0,canvas.width,canvas.height);
 	checkCollision();
-	drawApple();
 	drawlevel();
+	drawApple();
 	drawPortal();
 	for(i=SnakeLength-1;i>=0;i--)
 	{
@@ -147,7 +147,7 @@ function handlePushBack()												//move every element of array 1 block behin
 function drawSnake()													//draw the rectangle
 {
 	context.beginPath();
-	context.rect(x[i],y[i],30,30);
+	context.rect(x[i],y[i],32,32);
 	context.fillStyle = "green";
 	context.fill(); 
 	context.closePath();
@@ -256,7 +256,7 @@ function spawnApple()													//spawn apple at random
 function drawApple()													//draw the apple every tick
 {
 	context.beginPath();
-	context.rect(applex*32,appley*32,30,30);
+	context.rect(applex*32,appley*32,32,32);
 	context.fillStyle = "red";
 	context.fill(); 
 	context.closePath();
@@ -326,7 +326,7 @@ function drawlevel()
 function drawBlock(x,y)
 {
 	context.beginPath();
-	context.rect(x,y,30,30);
+	context.rect(x,y,32,32);
 	context.fillStyle = "black";
 	context.fill(); 
 	context.closePath();
@@ -419,22 +419,22 @@ function spawnPortalPair(index)
 function drawPortal()
 {
 	context.beginPath();
-	context.rect(portal1[0]*32,portal1[1]*32,30,30);
-	context.rect(portal2[0]*32,portal2[1]*32,30,30);
+	context.rect(portal1[0]*32,portal1[1]*32,32,32);
+	context.rect(portal2[0]*32,portal2[1]*32,32,32);
 	context.fillStyle = "orange";
 	context.fill(); 
 	context.closePath();
 
 	context.beginPath();
-	context.rect(portal3[0]*32,portal3[1]*32,30,30);
-	context.rect(portal4[0]*32,portal4[1]*32,30,30);
+	context.rect(portal3[0]*32,portal3[1]*32,32,32);
+	context.rect(portal4[0]*32,portal4[1]*32,32,32);
 	context.fillStyle = "#0095DD";
 	context.fill(); 
 	context.closePath();
 
 	context.beginPath();
-	context.rect(portal5[0]*32,portal5[1]*32,30,30);
-	context.rect(portal6[0]*32,portal6[1]*32,30,30);
+	context.rect(portal5[0]*32,portal5[1]*32,32,32);
+	context.rect(portal6[0]*32,portal6[1]*32,32,32);
 	context.fillStyle = "purple";
 	context.fill(); 
 	context.closePath();
