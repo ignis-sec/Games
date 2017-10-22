@@ -8,6 +8,7 @@ var SnakeLength=4;
 var applex=getRandomInt(0,20);
 var appley=getRandomInt(0,20);
 var dif=1;
+var score=0;
 
 
 document.addEventListener("keypress", keyPressHandler,false);
@@ -51,7 +52,7 @@ function draw()															//main function
 		drawSnake();
 	}
 	handleMovement();
-	window.setTimeout(draw,dif*100);
+	window.setTimeout(draw,dif*25);
 }
 
 function handleMovement()												//check which key was pressed and which way should the snake go next tick
@@ -147,25 +148,27 @@ function getRandomInt(min, max) 										//get random int
 
 function updateScore()
 {
-	document.querySelector('.results').innerHTML = (SnakeLength-4)*dif*10;
+	score=score + (11-dif)*5
+	document.querySelector('.results').innerHTML = score;
 }
 
 function updateDifficulty()
 {
-	document.querySelector('.Leveldif').innerHTML = dif*100;
+	document.querySelector('.Leveldif').innerHTML = (11-dif)*100;
 }
 
 function increase()
 {
-
-	dif++;
+	if(dif>1)
+	dif--;
+updateDifficulty();
 
 }
 function decrease()
 {
-
-	dif--;
-
+	if(dif<10)
+	dif++;
+updateDifficulty();
 }
 
 
