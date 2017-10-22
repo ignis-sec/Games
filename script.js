@@ -11,6 +11,7 @@ var dif=2;
 var score=0;
 var highScore = JSON.parse(localStorage.getItem('highScore'))||[0,0,0,0];
 var curLevel=3;
+var dummy = [0,0,0,0,0,0,0];
 var portal1 = [0,0];
 var portal2 = [0,0];
 var portal3 = [0,0];
@@ -20,10 +21,6 @@ var portal6 = [0,0];
 var portalmin1=0;
 var portalmin2=0;
 var portalmin3=0;
-
-if(highscore)
-var clickx=0;
-var clicky=0;
 
 var level= 
 [
@@ -50,15 +47,6 @@ var level=
 
 ]
 
-
-document.addEventListener('click', function()
-
-{
-	clickx=e.pageX;
-	clicky=e.pageY;
-}, false);
-
-
 var levelLength=level[curLevel][0][0];
 document.addEventListener("keypress", keyPressHandler,false);			//listener
 document.addEventListener("keydown", keyPressHandler2,false);	
@@ -71,7 +59,7 @@ window.onload = function()												//what to do at start
 	updateLevel();
 	document.querySelector('.results').innerHTML = score; 
 	spawnPortalPair();
-	
+	draw();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -97,21 +85,6 @@ function keyPressHandler2(e)                                             //key h
 }
 	var x =[480,480,480,480];											//initial snake
 	var y =[64,96,128,160];
-
-
-
-//////////////////////////////////////////////////////////////////////////
-function drawMenu()
-{
-	context.beginPath();
-	context.rect(320,320,320,80);
-	context.fillStyle = "green";
-	context.fill(); 
-	context.closePath();
-
-	if(false)draw();
-
-}
 
 //////////////////////////////////////////////////////////////////////////
 function draw()															//main function
@@ -268,6 +241,7 @@ function spawnApple()													//spawn apple at random
 			spawnApple();
 		}
 	}
+	
 
 }
 
