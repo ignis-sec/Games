@@ -12,6 +12,11 @@ var score=0;
 var highScore = JSON.parse(localStorage.getItem('highScore'));
 var curLevel=0;
 var dummy = [0,0,0,0,0,0,0];
+var portal1 = [0,0];
+var portal2 = [0,0];
+var portalmin=0;
+
+
 
 var level= 
 [
@@ -46,6 +51,7 @@ window.onload = function()												//what to do at start
 	updateHscore();
 	updateLevel();
 	document.querySelector('.results').innerHTML = score; 
+	spawnPortalPair();
 	draw();
 }
 
@@ -68,6 +74,7 @@ function draw()															//main function
 	checkCollision();
 	drawApple();
 	drawlevel();
+	drawPortal();
 	for(i=SnakeLength-1;i>=0;i--)
 	{
 		if(i!=SnakeLength-1)
@@ -77,6 +84,9 @@ function draw()															//main function
 		drawSnake();
 	}
 	handleMovement();
+	portalmin++;
+	if((getRandomInt(0,50)+portalmin)%100==0) spawnPortalPair();
+
 	window.setTimeout(draw,dif*25);										//loop element
 }
 
@@ -115,7 +125,7 @@ function drawSnake()													//draw the rectangle
 {
 	context.beginPath();
 	context.rect(x[i],y[i],30,30);
-	context.fillStyle = "#0095DD";
+	context.fillStyle = "green";
 	context.fill(); 
 	context.closePath();
 }
@@ -151,20 +161,39 @@ function checkCollision()												//collision engine
 			restartLevel();
 		}
 	}
+	if(x[0]==portal1[0]*32 && y[0]==portal1[1]*32)						//check if it is portals
+	{
+		x[0]=portal2[0]*32;
+		y[0]=portal2[1]*32;
+	}else
+	if(x[0]==portal2[0]*32 && y[0]==portal2[1]*32)
+	{
+		x[0]=portal1[0]*32;
+		y[0]=portal1[1]*32;
+	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////
 function spawnApple()													//spawn apple at random
 {
-	applex=getRandomInt(0,20);
-	appley=getRandomInt(0,20);	
+	applex=getRandomInt(0,25);
+	appley=getRandomInt(0,25);	
 
 	for(n=1;n<=levelLength;n++)
 	{
 		if(applex==level[curLevel][n][0]*32 && appley==level[curLevel][n][1]*32)
 		{
-				spawnApple();
+			spawnApple();
 		}
+	}
+	if(applex==portal1[0]*32 && appley==portal1[1]*32)						//check if it is portals
+	{
+		spawnApple();
+	}else
+	if(applex==portal2[0]*32 && appley==portal2[1]*32)
+	{
+		spawnApple();
 	}
 
 }
@@ -290,4 +319,37 @@ function restartLevel()
 
 }
 
+function spawnPortalPair()
+{
+	portalmin=0;
+	portal1[0]=getRandomInt(0,25);
+	portal1[1]=getRandomInt(0,25);
+	portal2[0]=getRandomInt(0,25);
+	portal2[1]=getRandomInt(0,25);	
+
+	for(n=1;n<=levelLength;n++)
+	{
+		if(applex==level[curLevel][n][0]*32 && appley==level[curLevel][n][1]*32)
+		{
+				spawnPortalPair();
+		}
+	}
+
+	
+}
+
+function drawPortal()
+{
+	context.beginPath();
+	context.rect(portal1[0]*32,portal1[1]*32,30,30);
+	context.fillStyle = "orange";
+	context.fill(); 
+	context.closePath();
+
+	context.beginPath();
+	context.rect(portal2[0]*32,portal2[1]*32,30,30);
+	context.fillStyle = "#0095DD";
+	context.fill(); 
+	context.closePath();
+}
 
