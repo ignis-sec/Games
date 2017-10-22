@@ -9,7 +9,7 @@ var applex=getRandomInt(0,20);
 var appley=getRandomInt(0,20);
 var dif=1;
 var score=0;
-
+var highScore = localStorage.getItem('highScore') || 0;
 
 document.addEventListener("keypress", keyPressHandler,false);
 
@@ -25,14 +25,16 @@ function keyPressHandler(e)                                              //key h
 }
 	var x =[320,320,320,320];
 	var y =[0,32,64,96];
+
 window.onload = function()
 {
-updateScore();
-updateDifficulty();												
-draw();
-}												
+	//updateScore();
+	updateDifficulty();			
+	updateHscore();
+	document.querySelector('.results').innerHTML = score;
+	draw();
 
-	
+}												
 
 
 
@@ -100,6 +102,7 @@ function checkCollision()												//collision engine
 			spawnApple();
 			SnakeLength++;
 			updateScore();
+			updateHscore();
 		}
 	for(j=1;j<SnakeLength-1;j++)
 	{
@@ -116,6 +119,7 @@ function checkCollision()												//collision engine
 			key=83;	
 			score=0;
 			updateScore();
+			updateHscore();
 			}
 				
 		}
@@ -157,6 +161,20 @@ function updateDifficulty()
 	document.querySelector('.Leveldif').innerHTML = (11-dif)*100;
 }
 
+function updateHscore()
+{
+	if (score > highScore)
+	{
+	 // Set the high score to the users' current points
+	 highScore = score;
+	 // Store the high score
+	 localStorage.setItem('highScore', highScore);
+	}
+	document.querySelector('.hscore').innerHTML = highScore;
+
+
+}
+
 function increase()
 {
 	if(dif>1)
@@ -171,7 +189,10 @@ function decrease()
 updateDifficulty();
 }
 
+//function drawlevel();
+//{
 
+//}
 
 
 
