@@ -23,7 +23,7 @@ function keyPressHandler(e)                                              //key h
 	
 }
 
-
+updateScore();
 setInterval(draw,100);													//game difficulty for future, interval time
 
 	var x =[320,320,320,320];
@@ -94,6 +94,7 @@ function checkCollision()												//collision engine
 		{
 			spawnApple();
 			SnakeLength++;
+			updateScore();
 		}
 	for(j=1;j<SnakeLength-1;j++)
 	{
@@ -137,3 +138,25 @@ function getRandomInt(min, max) 										//get random int
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
+
+function updateScore()
+{
+document.querySelector('.results').innerHTML = (SnakeLength-4)*10;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
