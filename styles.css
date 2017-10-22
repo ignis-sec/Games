@@ -1,5 +1,4 @@
-*
-{
+*{
 	padding:0;
 	margin:0;
 }
@@ -16,8 +15,22 @@
 	padding:20px;
 	font-size: 25px;
 }
+
 #button2{
 	display: inline-block;
 	padding:20px;
 	font-size: 25px;
+
+}
+#button3{
+	display: inline-block;
+	padding:20px;
+	font-size: 25px;
+}
+
+#button4{
+	display: inline-block;
+	padding:20px;
+	font-size: 25px;
+
 }

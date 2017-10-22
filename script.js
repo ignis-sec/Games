@@ -9,12 +9,25 @@ var applex=getRandomInt(0,20);
 var appley=getRandomInt(0,20);
 var dif=1;
 var score=0;
-var highScore = localStorage.getItem('highScore') || 0;
+var highScore = JSON.parse(localStorage.getItem('highScore'));
+var curLevel=0;
+var dummy = [0,0,0,0,0,0,0];
+
+var level= 
+[
+	[
+	[1,0],[500,0]
+	],
+
+	[
+	[60,0], [0,0] , [1,0] ,[2,0] ,[3,0] ,[4,0] ,[5,0] ,[6,0] ,[7,0] ,[8,0] ,[9,0] ,[10,0] ,[11,0] ,[12,0] ,[13,0] ,[14,0] ,[15,0] ,[16,0] ,[17,0] ,[18,0] ,[19,0], [20,0] ,[21,0] ,[22,0] ,[23,0] ,[24,0] ,[25,0] ,[26,0] ,[27,0] ,[28,0] ,[29,0],[0,24] , [1,24] ,[2,24] ,[3,24] ,[4,24] ,[5,24] ,[6,24] ,[7,24] ,[8,24] ,[9,24] ,[10,24] ,[11,24] ,[12,24] ,[13,24] ,[14,24] ,[15,24] ,[16,24] ,[17,24] ,[18,24] ,[19,24], [20,24] ,[21,24] ,[22,24] ,[23,24] ,[24,24] ,[25,24] ,[26,24] ,[27,24] ,[28,24] ,[29,24]
+	]
+
+]
 
 
 
-
-
+var levelLength=level[curLevel][0][0];
 
 
 
@@ -25,7 +38,8 @@ window.onload = function()												//what to do at start
 {
 	updateDifficulty();			
 	updateHscore();
-	document.querySelector('.results').innerHTML = score;
+	updateLevel();
+	document.querySelector('.results').innerHTML = score; 
 	draw();
 }
 
@@ -38,8 +52,8 @@ function keyPressHandler(e)                                             //key ha
 		key=keylast;
 	}	
 }
-	var x =[320,320,320,320];											//initial snake
-	var y =[0,32,64,96];
+	var x =[480,480,480,480];											//initial snake
+	var y =[64,96,128,160];
 
 //////////////////////////////////////////////////////////////////////////
 function draw()															//main function
@@ -47,7 +61,7 @@ function draw()															//main function
 	context.clearRect(0,0,canvas.width,canvas.height);
 	checkCollision();
 	drawApple();
-	
+	drawlevel();
 	for(i=SnakeLength-1;i>=0;i--)
 	{
 		if(i!=SnakeLength-1)
@@ -66,19 +80,19 @@ function handleMovement()												//check which key was pressed and which way
 	if(key==87||key==119)
 		{
 			y[0]-=32;
-			y[0]=(640+y[0])%640;
+			y[0]=(canvas.height+y[0])%canvas.height;
 		}else if(key==65||key==97)
 		{
 			x[0]+=-32;
-			x[0]=(x[0]+640)%640;
+			x[0]=(x[0]+canvas.width)%canvas.width;
 		}else if(key==83||key==115)
 		{
 			y[0]+=32;
-			y[0]=y[0]%640;
+			y[0]=y[0]%canvas.height;
 		}else if(key==68||key==100)
 		{
 			x[0]+=32;
-			x[0]=x[0]%640;
+			x[0]=x[0]%canvas.width;
 	}	
 	keylast=key;
 }
@@ -116,17 +130,19 @@ function checkCollision()												//collision engine
 		{
 			if(SnakeLength>4)
 			{
-				console.log(x[j]);
-				console.log(x[0]);
-				alert("Game over");
-				x =[320,320,320,320];
-				y =[0,32,64,96];
-				SnakeLength=4;
-				key=83;	
-				score=0;
-				updateScore();
-				updateHscore();
+					alert("Game over");
+
+				restartLevel();
 			}		
+		}
+	}
+	for(m=1;m<=levelLength;m++)
+	{
+		if(x[0]==level[curLevel][m][0]*32 && y[0]==level[curLevel][m][1])
+		{
+				alert("Game over");
+
+			restartLevel();
 		}
 	}
 }
@@ -135,7 +151,16 @@ function checkCollision()												//collision engine
 function spawnApple()													//spawn apple at random
 {
 	applex=getRandomInt(0,20);
-	appley=getRandomInt(0,20);		
+	appley=getRandomInt(0,20);	
+
+	for(n=1;n<=levelLength;n++)
+	{
+		if(applex==level[curLevel][n][0]*32 && appley==level[curLevel][n][1])
+		{
+				spawnApple();
+		}
+	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -172,12 +197,12 @@ function updateDifficulty()												//update game speed
 //////////////////////////////////////////////////////////////////////////
 function updateHscore()													//update high score
 {
-	if (score > highScore)
+	if (score > highScore[curLevel])
 	{
-		 highScore = score;
-		 localStorage.setItem('highScore', highScore);
+		 highScore[curLevel] = score;
+		 localStorage.setItem('highScore', JSON.stringify(highScore));
 	}
-	document.querySelector('.hscore').innerHTML = highScore;
+	document.querySelector('.hscore').innerHTML =highScore[curLevel];
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -197,16 +222,63 @@ function decrease()														//opposite of above
 }
 
 //////////////////////////////////////////////////////////////////////////
-//function drawlevel();
-//{
+function drawlevel()
+{
 
-//}
-
-
-
-
-
+	for(k=1;k<=levelLength;k++)
+	{
+		drawBlock(level[curLevel][k][0]*32,level[curLevel][k][1]*32);
+	}
 
 
+}
+
+//////////////////////////////////////////////////////////////////////////
+function drawBlock(x,y)
+{
+	context.beginPath();
+	context.rect(x,y,30,30);
+	context.fillStyle = "black";
+	context.fill(); 
+	context.closePath();
+}
+
+//////////////////////////////////////////////////////////////////////////
+function lincrease()														//increase game speed(decrease the time interval)
+{
+	if(curLevel<100)
+	restartLevel();
+	curLevel++;
+	updateLevel();
+}
+
+//////////////////////////////////////////////////////////////////////////
+function ldecrease()														//opposite of above
+{
+	if(curLevel>0)
+	restartLevel();
+	curLevel--;
+	updateLevel();
+}
+
+//////////////////////////////////////////////////////////////////////////
+function updateLevel()												//update game speed
+{
+	levelLength=level[curLevel][0][0];
+	document.querySelector('.levelhtml').innerHTML = curLevel;
+}
+
+//////////////////////////////////////////////////////////////////////////
+function restartLevel()
+{
+	x =[480,480,480,480];											//initial snake
+	y =[64,96,128,160];
+	SnakeLength=4;
+	key=83;	
+	score=0;
+	updateScore();
+	updateHscore();
+
+}
 
 
