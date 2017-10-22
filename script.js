@@ -1,6 +1,6 @@
 
-
-var canvas= document.getElementById('mainCanvas')
+																		
+var canvas= document.getElementById('mainCanvas')						//variables
 var context= canvas.getContext('2d');
 var key=83;
 var keylast=83;
@@ -87,8 +87,8 @@ function drawSnake()													//draw the rectangle
 		context.closePath();
 
 }
-
-function checkCollision()
+						
+function checkCollision()												//collision engine
 {
 	if(x[0]==applex*32&&y[0]==appley*32)
 		{
@@ -104,7 +104,10 @@ function checkCollision()
 			console.log(x[j]);
 			console.log(x[0]);
 			alert("Game over");
-			setInterval(draw,1000000000);	
+			x =[320,320,320,320];
+			y =[0,32,64,96];
+			SnakeLength=4;
+			key=83;	
 			}
 				
 		}
@@ -112,13 +115,13 @@ function checkCollision()
 
 }
 
-function spawnApple()
+function spawnApple()													//spawn apple at random
 {
 	applex=getRandomInt(0,20);
 	appley=getRandomInt(0,20);		
 }
 
-function drawApple()
+function drawApple()													//draw the apple every tick
 {
 		context.beginPath();
 		context.rect(applex*32,appley*32,30,30);
@@ -127,8 +130,9 @@ function drawApple()
 		context.closePath();
 
 }
-
-function getRandomInt(min, max) {
+																								
+function getRandomInt(min, max) 										//get random int 
+{	
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
