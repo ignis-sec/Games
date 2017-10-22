@@ -9,14 +9,14 @@ var applex=getRandomInt(0,20);
 var appley=getRandomInt(0,20);
 var dif=1;
 var score=0;
-var highScore = JSON.parse(localStorage.getItem('highScore'))|| 0;
+var highScore = JSON.parse(localStorage.getItem('highScore'))||[0,0,0,0,0];
 var curLevel=0;
 var dummy = [0,0,0,0,0,0,0];
 var portal1 = [0,0];
 var portal2 = [0,0];
 var portalmin=0;
-
-
+	//if(JSON.parse(localStorage.getItem('highScore'))="undefined") 
+ 	//highScore = [0,0,0,0,0];
 
 var level= 
 [
