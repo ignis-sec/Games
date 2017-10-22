@@ -7,7 +7,7 @@ var keylast=83;
 var SnakeLength=4;
 var applex=getRandomInt(0,20);
 var appley=getRandomInt(0,20);
-
+var dif=1;
 
 
 document.addEventListener("keypress", keyPressHandler,false);
@@ -22,12 +22,16 @@ function keyPressHandler(e)                                              //key h
 	}
 	
 }
-
-updateScore();
-setInterval(draw,100);													//game difficulty for future, interval time
-
 	var x =[320,320,320,320];
 	var y =[0,32,64,96];
+window.onload = function()
+{
+updateScore();
+updateDifficulty();												
+draw();
+}												
+
+	
 
 
 
@@ -47,7 +51,7 @@ function draw()															//main function
 		drawSnake();
 	}
 	handleMovement();
-	
+	window.setTimeout(draw,dif*100);
 }
 
 function handleMovement()												//check which key was pressed and which way should the snake go next tick
@@ -109,6 +113,8 @@ function checkCollision()												//collision engine
 			y =[0,32,64,96];
 			SnakeLength=4;
 			key=83;	
+			score=0;
+			updateScore();
 			}
 				
 		}
@@ -141,14 +147,26 @@ function getRandomInt(min, max) 										//get random int
 
 function updateScore()
 {
-document.querySelector('.results').innerHTML = (SnakeLength-4)*10;
+	document.querySelector('.results').innerHTML = (SnakeLength-4)*dif*10;
 }
 
+function updateDifficulty()
+{
+	document.querySelector('.Leveldif').innerHTML = dif*100;
+}
 
+function increase()
+{
 
+	dif++;
 
+}
+function decrease()
+{
 
+	dif--;
 
+}
 
 
 
