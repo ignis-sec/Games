@@ -22,7 +22,6 @@ var portalmin1=0;
 var portalmin2=0;
 var portalmin3=0;
 
-
 var level= 
 [
 	[
@@ -48,14 +47,9 @@ var level=
 
 ]
 
-
 var levelLength=level[curLevel][0][0];
-
-
-
 document.addEventListener("keypress", keyPressHandler,false);			//listener
-document.addEventListener("keydown", keyPressHandler2,false);
-	
+document.addEventListener("keydown", keyPressHandler2,false);	
 
 //////////////////////////////////////////////////////////////////////////
 window.onload = function()												//what to do at start
@@ -238,7 +232,8 @@ function spawnApple()													//spawn apple at random
 {
 	applex=getRandomInt(0,25);
 	appley=getRandomInt(0,25);	
-
+	console.log(applex);
+	console.log(appley);
 	for(n=1;n<=levelLength;n++)
 	{
 		if(applex==level[curLevel][n][0]*32 && appley==level[curLevel][n][1]*32)
