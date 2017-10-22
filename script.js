@@ -7,14 +7,20 @@ var keylast=83;
 var SnakeLength=4;
 var applex=getRandomInt(0,20);
 var appley=getRandomInt(0,20);
-var dif=1;
+var dif=2;
 var score=0;
 var highScore = JSON.parse(localStorage.getItem('highScore'))||[0,0,0,0,0];
 var curLevel=0;
 var dummy = [0,0,0,0,0,0,0];
 var portal1 = [0,0];
 var portal2 = [0,0];
-var portalmin=0;
+var portal3 = [0,0];
+var portal4 = [0,0];
+var portal5 = [0,0];
+var portal6 = [0,0];
+var portalmin1=0;
+var portalmin2=0;
+var portalmin3=0;
 	//if(JSON.parse(localStorage.getItem('highScore'))="undefined") 
  	//highScore = [0,0,0,0,0];
 
@@ -98,8 +104,12 @@ function draw()															//main function
 		drawSnake();
 	}
 	handleMovement();
-	portalmin++;
-	if((getRandomInt(0,50)+portalmin)%100==0) spawnPortalPair();
+	portalmin1++;
+	portalmin1++;
+	portalmin1++;
+	if((getRandomInt(0,50)+portalmin1*1000/dif*25)%1000==0) spawnPortalPair(1);
+	if((getRandomInt(0,50)+portalmin2*1000/dif*25)%1000==0) spawnPortalPair(2);
+	if((getRandomInt(0,50)+portalmin3*1000/dif*25)%1000==0) spawnPortalPair(3);
 
 	window.setTimeout(draw,dif*25);										//loop element
 }
@@ -175,7 +185,7 @@ function checkCollision()												//collision engine
 			restartLevel();
 		}
 	}
-	if(x[0]==portal1[0]*32 && y[0]==portal1[1]*32)						//check if it is portals
+	if(x[0]==portal1[0]*32 && y[0]==portal1[1]*32)						//check if it is portal 1/2 pair
 	{
 		x[0]=portal2[0]*32;
 		y[0]=portal2[1]*32;
@@ -184,6 +194,28 @@ function checkCollision()												//collision engine
 	{
 		x[0]=portal1[0]*32;
 		y[0]=portal1[1]*32;
+	}
+
+		if(x[0]==portal3[0]*32 && y[0]==portal3[1]*32)						//check if it is portal 3/4 pair
+	{
+		x[0]=portal4[0]*32;
+		y[0]=portal4[1]*32;
+	}else
+	if(x[0]==portal4[0]*32 && y[0]==portal4[1]*32)
+	{
+		x[0]=portal3[0]*32;
+		y[0]=portal3[1]*32;
+	}
+
+		if(x[0]==portal5[0]*32 && y[0]==portal5[1]*32)						//check if it is portal 5/6 pair
+	{
+		x[0]=portal6[0]*32;
+		y[0]=portal6[1]*32;
+	}else
+	if(x[0]==portal6[0]*32 && y[0]==portal6[1]*32)
+	{
+		x[0]=portal5[0]*32;
+		y[0]=portal5[1]*32;
 	}
 
 }
@@ -333,13 +365,31 @@ function restartLevel()
 
 }
 
-function spawnPortalPair()
+function spawnPortalPair(index)
 {
-	portalmin=0;
-	portal1[0]=getRandomInt(0,25);
-	portal1[1]=getRandomInt(0,25);
-	portal2[0]=getRandomInt(0,25);
-	portal2[1]=getRandomInt(0,25);	
+	if(index==1)
+	{
+		portalmin1=0;
+		portal1[0]=getRandomInt(0,25);
+		portal1[1]=getRandomInt(0,25);
+		portal2[0]=getRandomInt(0,25);
+		portal2[1]=getRandomInt(0,25);
+}else if (index==2)
+	{
+		portalmin2=0;
+		portal3[0]=getRandomInt(0,25);
+		portal3[1]=getRandomInt(0,25);
+		portal4[0]=getRandomInt(0,25);
+		portal4[1]=getRandomInt(0,25);
+	}else
+	{
+		portalmin3=0;
+		portal5[0]=getRandomInt(0,25);
+		portal5[1]=getRandomInt(0,25);
+		portal6[0]=getRandomInt(0,25);
+		portal6[1]=getRandomInt(0,25);
+	}
+	
 
 	for(n=1;n<=levelLength;n++)
 	{
@@ -349,6 +399,7 @@ function spawnPortalPair()
 		}
 	}
 
+
 	
 }
 
@@ -356,13 +407,22 @@ function drawPortal()
 {
 	context.beginPath();
 	context.rect(portal1[0]*32,portal1[1]*32,30,30);
+	context.rect(portal2[0]*32,portal2[1]*32,30,30);
 	context.fillStyle = "orange";
 	context.fill(); 
 	context.closePath();
 
 	context.beginPath();
-	context.rect(portal2[0]*32,portal2[1]*32,30,30);
+	context.rect(portal3[0]*32,portal3[1]*32,30,30);
+	context.rect(portal4[0]*32,portal4[1]*32,30,30);
 	context.fillStyle = "#0095DD";
+	context.fill(); 
+	context.closePath();
+
+	context.beginPath();
+	context.rect(portal5[0]*32,portal5[1]*32,30,30);
+	context.rect(portal6[0]*32,portal6[1]*32,30,30);
+	context.fillStyle = "purple";
 	context.fill(); 
 	context.closePath();
 }
