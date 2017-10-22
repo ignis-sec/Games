@@ -263,18 +263,10 @@ function spawnApple()													//spawn apple at random
 	console.log(appley);
 	for(n=1;n<=levelLength;n++)
 	{
-		if(applex==level[curLevel][n][0]*32 && appley==level[curLevel][n][1]*32)
+		if(applex*32==level[curLevel][n][0]*32 && appley*32==level[curLevel][n][1]*32)
 		{
 			spawnApple();
 		}
-	}
-	if(applex==portal1[0]*32 && appley==portal1[1]*32)						//check if it is portals
-	{
-		spawnApple();
-	}else
-	if(applex==portal2[0]*32 && appley==portal2[1]*32)
-	{
-		spawnApple();
 	}
 
 }
