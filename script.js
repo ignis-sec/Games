@@ -1,7 +1,7 @@
 var canvas= document.getElementById('mainCanvas')
 var context= canvas.getContext('2d');
 var key=83;
-var SnakeLength=3;
+var SnakeLength=5;
 
 document.addEventListener("keypress", keyPressHandler,false);
 
@@ -13,10 +13,10 @@ function keyPressHandler(e)
 }
 
 
-setInterval(draw,1000);
+setInterval(draw,100);
 
-	var x =,320,352];
-	var y =[0,0,0];
+	var x =[320,320,320,320,320];
+	var y =[0,32,64,96,128];
 
 
 
@@ -25,9 +25,9 @@ function draw()
 	context.clearRect(0,0,canvas.width,canvas.height);
 	context.beginPath();
 	handleMovement();
-	for(i=0;i<SnakeLength;i++)
+	for(i=SnakeLength-1;i>=0;i--)
 	{
-		if(i!=SnakeLength-1)
+		if(i!=SnakeLength)
 		{
 			handlePushBack();
 		}
@@ -43,7 +43,7 @@ function handleMovement()
 	if(key==87||key==119)
 		{
 			y[0]-=32;
-			y=(640+y[0])%640;
+			y[0]=(640+y[0])%640;
 		}else if(key==65||key==97)
 		{
 			x[0]+=-32;
@@ -72,6 +72,8 @@ function drawSnake()
 		context.fillStyle = "#0095DD";
 		context.fill(); 
 		context.closePath();
-		console.log("drawn");
+		console.log("drawn at");
+		console.log(x[i]);
+		console.log(y[i]);
 
 }
