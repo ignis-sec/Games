@@ -11,33 +11,37 @@ var dif=1;
 var score=0;
 var highScore = localStorage.getItem('highScore') || 0;
 
-document.addEventListener("keypress", keyPressHandler,false);
 
-function keyPressHandler(e)                                              //key handler
-{
-	
-	key=e.keyCode;														
-	if(keylast==key+4||keylast==key-4||keylast==key+3||keylast==key-3)	//if its the opposite of current direction, disregard keypress
-	{
-		key=keylast;
-	}
-	
-}
-	var x =[320,320,320,320];
-	var y =[0,32,64,96];
 
-window.onload = function()
+
+
+
+
+
+document.addEventListener("keypress", keyPressHandler,false);			//listener
+
+//////////////////////////////////////////////////////////////////////////
+window.onload = function()												//what to do at start
 {
-	//updateScore();
 	updateDifficulty();			
 	updateHscore();
 	document.querySelector('.results').innerHTML = score;
 	draw();
+}
 
-}												
+//////////////////////////////////////////////////////////////////////////
+function keyPressHandler(e)                                             //key handler
+{	
+	key=e.keyCode;														
+	if(keylast==key+4||keylast==key-4||keylast==key+3||keylast==key-3)	//if its the opposite of current direction, disregard keypress
+	{
+		key=keylast;
+	}	
+}
+	var x =[320,320,320,320];											//initial snake
+	var y =[0,32,64,96];
 
-
-
+//////////////////////////////////////////////////////////////////////////
 function draw()															//main function
 {
 	context.clearRect(0,0,canvas.width,canvas.height);
@@ -50,13 +54,13 @@ function draw()															//main function
 		{
 			handlePushBack();
 		}
-		
 		drawSnake();
 	}
 	handleMovement();
-	window.setTimeout(draw,dif*25);
+	window.setTimeout(draw,dif*25);										//loop element
 }
 
+//////////////////////////////////////////////////////////////////////////
 function handleMovement()												//check which key was pressed and which way should the snake go next tick
 {
 	if(key==87||key==119)
@@ -79,70 +83,72 @@ function handleMovement()												//check which key was pressed and which way
 	keylast=key;
 }
 
+//////////////////////////////////////////////////////////////////////////
 function handlePushBack()												//move every element of array 1 block behind
 {
 	x[i+1]=x[i];
 	y[i+1]=y[i];
 }
 
+//////////////////////////////////////////////////////////////////////////
 function drawSnake()													//draw the rectangle
 {
-		context.beginPath();
-		context.rect(x[i],y[i],30,30);
-		context.fillStyle = "#0095DD";
-		context.fill(); 
-		context.closePath();
-
+	context.beginPath();
+	context.rect(x[i],y[i],30,30);
+	context.fillStyle = "#0095DD";
+	context.fill(); 
+	context.closePath();
 }
-						
+
+//////////////////////////////////////////////////////////////////////////						
 function checkCollision()												//collision engine
-{
-	if(x[0]==applex*32&&y[0]==appley*32)
-		{
-			spawnApple();
-			SnakeLength++;
-			updateScore();
-			updateHscore();
-		}
-	for(j=1;j<SnakeLength-1;j++)
+{	
+	if(x[0]==applex*32&&y[0]==appley*32)								//if it is an apple
+	{	
+		spawnApple();
+		SnakeLength++;
+		updateScore();
+		updateHscore();
+	}
+	for(j=1;j<SnakeLength-1;j++)										//if it is itself
 	{
 		if(x[0]==x[j] && y[0]==y[j])
 		{
 			if(SnakeLength>4)
 			{
-			console.log(x[j]);
-			console.log(x[0]);
-			alert("Game over");
-			x =[320,320,320,320];
-			y =[0,32,64,96];
-			SnakeLength=4;
-			key=83;	
-			score=0;
-			updateScore();
-			updateHscore();
-			}
-				
+				console.log(x[j]);
+				console.log(x[0]);
+				alert("Game over");
+				x =[320,320,320,320];
+				y =[0,32,64,96];
+				SnakeLength=4;
+				key=83;	
+				score=0;
+				updateScore();
+				updateHscore();
+			}		
 		}
 	}
-
 }
 
+//////////////////////////////////////////////////////////////////////////
 function spawnApple()													//spawn apple at random
 {
 	applex=getRandomInt(0,20);
 	appley=getRandomInt(0,20);		
 }
 
+//////////////////////////////////////////////////////////////////////////
 function drawApple()													//draw the apple every tick
 {
-		context.beginPath();
-		context.rect(applex*32,appley*32,30,30);
-		context.fillStyle = "red";
-		context.fill(); 
-		context.closePath();
-
+	context.beginPath();
+	context.rect(applex*32,appley*32,30,30);
+	context.fillStyle = "red";
+	context.fill(); 
+	context.closePath();
 }
-																								
+
+//////////////////////////////////////////////////////////////////////////																								
 function getRandomInt(min, max) 										//get random int 
 {	
   min = Math.ceil(min);
@@ -150,45 +156,47 @@ function getRandomInt(min, max) 										//get random int
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-function updateScore()
+//////////////////////////////////////////////////////////////////////////
+function updateScore()													//update scoreboard
 {
 	score=score + (11-dif)*5
 	document.querySelector('.results').innerHTML = score;
 }
 
-function updateDifficulty()
+//////////////////////////////////////////////////////////////////////////
+function updateDifficulty()												//update game speed
 {
 	document.querySelector('.Leveldif').innerHTML = (11-dif)*100;
 }
 
-function updateHscore()
+//////////////////////////////////////////////////////////////////////////
+function updateHscore()													//update high score
 {
 	if (score > highScore)
 	{
-	 // Set the high score to the users' current points
-	 highScore = score;
-	 // Store the high score
-	 localStorage.setItem('highScore', highScore);
+		 highScore = score;
+		 localStorage.setItem('highScore', highScore);
 	}
 	document.querySelector('.hscore').innerHTML = highScore;
-
-
 }
 
-function increase()
+//////////////////////////////////////////////////////////////////////////
+function increase()														//increase game speed(decrease the time interval)
 {
 	if(dif>1)
 	dif--;
-updateDifficulty();
-
+	updateDifficulty();
 }
-function decrease()
+
+//////////////////////////////////////////////////////////////////////////
+function decrease()														//opposite of above
 {
 	if(dif<10)
 	dif++;
-updateDifficulty();
+	updateDifficulty();
 }
 
+//////////////////////////////////////////////////////////////////////////
 //function drawlevel();
 //{
 
