@@ -9,8 +9,8 @@ var applex=getRandomInt(0,20);
 var appley=getRandomInt(0,20);
 var dif=2;
 var score=0;
-var highScore = JSON.parse(localStorage.getItem('highScore'))||[0,0,0,0,0];
-var curLevel=0;
+var highScore = JSON.parse(localStorage.getItem('highScore'))||[0,0,0,0];
+var curLevel=3;
 var dummy = [0,0,0,0,0,0,0];
 var portal1 = [0,0];
 var portal2 = [0,0];
@@ -21,8 +21,7 @@ var portal6 = [0,0];
 var portalmin1=0;
 var portalmin2=0;
 var portalmin3=0;
-	//if(JSON.parse(localStorage.getItem('highScore'))="undefined") 
- 	//highScore = [0,0,0,0,0];
+
 
 var level= 
 [
@@ -170,6 +169,45 @@ function checkCollision()												//collision engine
 		updateScore();
 		updateHscore();
 	}
+
+	if(x[0]==portal1[0]*32 && y[0]==portal1[1]*32)						//check if it is portal 1/2 pair
+	{
+		x[0]=portal2[0]*32;
+		y[0]=portal2[1]*32;
+		return;
+	}else
+	if(x[0]==portal2[0]*32 && y[0]==portal2[1]*32)
+	{
+		x[0]=portal1[0]*32;
+		y[0]=portal1[1]*32;
+		return;
+	}
+
+		if(x[0]==portal3[0]*32 && y[0]==portal3[1]*32)						//check if it is portal 3/4 pair
+	{
+		x[0]=portal4[0]*32;
+		y[0]=portal4[1]*32;
+		return;
+	}else
+	if(x[0]==portal4[0]*32 && y[0]==portal4[1]*32)
+	{
+		x[0]=portal3[0]*32;
+		y[0]=portal3[1]*32;
+		return;
+	}
+
+		if(x[0]==portal5[0]*32 && y[0]==portal5[1]*32)						//check if it is portal 5/6 pair
+	{
+		x[0]=portal6[0]*32;
+		y[0]=portal6[1]*32;
+		return;
+	}else
+	if(x[0]==portal6[0]*32 && y[0]==portal6[1]*32)
+	{
+		x[0]=portal5[0]*32;
+		y[0]=portal5[1]*32;
+	}
+
 	for(j=1;j<SnakeLength-1;j++)										//if it is itself
 	{
 		if(x[0]==x[j] && y[0]==y[j])
@@ -191,38 +229,7 @@ function checkCollision()												//collision engine
 			restartLevel();
 		}
 	}
-	if(x[0]==portal1[0]*32 && y[0]==portal1[1]*32)						//check if it is portal 1/2 pair
-	{
-		x[0]=portal2[0]*32;
-		y[0]=portal2[1]*32;
-	}else
-	if(x[0]==portal2[0]*32 && y[0]==portal2[1]*32)
-	{
-		x[0]=portal1[0]*32;
-		y[0]=portal1[1]*32;
-	}
-
-		if(x[0]==portal3[0]*32 && y[0]==portal3[1]*32)						//check if it is portal 3/4 pair
-	{
-		x[0]=portal4[0]*32;
-		y[0]=portal4[1]*32;
-	}else
-	if(x[0]==portal4[0]*32 && y[0]==portal4[1]*32)
-	{
-		x[0]=portal3[0]*32;
-		y[0]=portal3[1]*32;
-	}
-
-		if(x[0]==portal5[0]*32 && y[0]==portal5[1]*32)						//check if it is portal 5/6 pair
-	{
-		x[0]=portal6[0]*32;
-		y[0]=portal6[1]*32;
-	}else
-	if(x[0]==portal6[0]*32 && y[0]==portal6[1]*32)
-	{
-		x[0]=portal5[0]*32;
-		y[0]=portal5[1]*32;
-	}
+	
 
 }
 
@@ -333,10 +340,13 @@ function drawBlock(x,y)
 //////////////////////////////////////////////////////////////////////////
 function lincrease()														//increase game speed(decrease the time interval)
 {
-	if(curLevel<100)
-	restartLevel();
-	curLevel++;
-	updateLevel();
+	if(curLevel<3)
+	{
+		restartLevel();
+		curLevel++;
+		updateLevel();		
+	}
+
 
 }
 
@@ -344,10 +354,12 @@ function lincrease()														//increase game speed(decrease the time interv
 function ldecrease()														//opposite of above
 {
 	if(curLevel>0)
-	
-	curLevel--;
-	updateLevel();
-	restartLevel();
+	{
+		curLevel--;
+		updateLevel();
+		restartLevel();
+	}	
+
 }
 
 //////////////////////////////////////////////////////////////////////////
