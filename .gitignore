@@ -95,3 +95,4 @@ Content/StarterContent
 *.opendb
 *.db-shm
 *.db-wal
+*.ipch
