@@ -1,4 +1,5 @@
 #pragma once
+#include "Actor.h"
 
 struct s_node {
 	Actor* thisActor;

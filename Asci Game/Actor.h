@@ -1,55 +1,47 @@
 #pragma once
 #include "Engine.h"
 
+struct s_position {
+	int x;
+	int y;
+};
 
 class Actor {
 public:
-	Actor(int x, int y);
+
+	Actor(int x, int y)
+	{
+		SetPosition(x, y);
+	}
 	virtual void ActorTick() {};
-	virtual void onCollision(s_Collision Collision) {};
-
-
+	virtual void onCollision() {};
+	
+	struct s_position GetPosition() { return m_position; }
+	char GetTag() { return m_tag; }
 
 	int SetPosition(int x, int y);
 	int AddPosition(int dx, int dy);
-	s_Collision isColliding();
+	
 private:
-	int m_x, m_y;
+	struct s_position m_position;
+	char m_tag;
 };
 
-Actor::Actor(int x, int y)
-{
-	SetPosition(x, y);
-}
 
 int Actor::SetPosition(int x, int y)
 {
-	int tempx = m_x, tempy = m_y;
-	m_x = x;
-	m_y = y;
-	s_Collision C = isColliding();
-	if (C.Instigator != NULL)
-	{
-		m_x = tempx;
-		m_y = tempy;
-		return 1;
-	}
+	int tempx = m_position.x, tempy = m_position.y;
+	m_position.x = x;
+	m_position.y = y;
 	return 0;
 
 }
 
 int Actor::AddPosition(int dx, int dy)
 {
-	int tempx = m_x, tempy = m_y;
-	m_x += dx;
-	m_y += dy;
-	s_Collision C = isColliding();
-	if (C.Instigator != NULL)
-	{
-		m_x = tempx;
-		m_y = tempy;
-		return 1;
-	}
+	int tempx = m_position.x, tempy = m_position.y;
+	m_position.x += dx;
+	m_position.y += dy;
 	return 0;
 
 }
