@@ -16,15 +16,10 @@
 #define  LPTSTR         TCHAR*
 #define  LPCTSTR        const TCHAR* 
 
-enum Direction { RIGHT, UP, LEFT, DOWN, NONE };
 
 
 
-struct s_Collision
-{
-	Direction Direction;
-	Actor* Instigator;
-};
+
 
 typedef struct s_Collision Collision;
 
@@ -36,8 +31,9 @@ public:
 	AsciiEngine(int nScreenWidth, int nScreenHeight);
 	void AppendToActors(Actor* newActor);
 	void DrawFrame();
-	Collision isColliding(Actor* Actor);
 	void ComposeFrame();
+	void StartGame();
+	void tick();
 private:
 	Actors m_AllActors;
 
@@ -64,22 +60,28 @@ AsciiEngine::AsciiEngine(int nScreenWidth, int nScreenHeight)
 
 	//std::thread timer(Sleep, 100);
 	//std::thread draw(DrawFrame);
+
+
+}
+void AsciiEngine::StartGame() {
 	while (1)
 	{
+		tick();
 		ComposeFrame();
 		DrawFrame();
 		Sleep(100);
 	}
-
 }
 
-Collision AsciiEngine::isColliding(Actor* Actor)
+void AsciiEngine::tick()
 {
-	Collision C;
-	C.Direction = LEFT;
-	C.Instigator = NULL;
+	struct s_node* cur = m_AllActors.head;
+		while (cur != NULL)
+	{
+			cur->thisActor->ActorTick();
 
-	return C;
+		cur = cur->next;
+	}
 }
 
 void AsciiEngine::DrawFrame()
@@ -90,9 +92,12 @@ void AsciiEngine::DrawFrame()
 void AsciiEngine::ComposeFrame()
 {
 	struct s_node* cur = m_AllActors.head;
+	for (int i = 0; i < m_nScreenWidth*m_nScreenHeight-1; i++) screen[i] =L' ';
 	while (cur != NULL)
 	{
 		screen[cur->thisActor->GetPosition().x + cur->thisActor->GetPosition().y*m_nScreenWidth] = cur->thisActor->GetTag();
+		
+		cur = cur->next;
 	}
 }
 
@@ -100,11 +105,8 @@ void AsciiEngine::AppendToActors(Actor* newActor) {
 	struct s_node* node;
 	node = (struct s_node*)malloc(sizeof(struct s_node));
 	node->thisActor = newActor;
-	if (m_AllActors.head == NULL) {
-		m_AllActors.head = m_AllActors.tail = node;
-		return;
-	}
 	node->next = m_AllActors.head;
+	m_AllActors.head = node;
 }
 
 
