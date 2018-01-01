@@ -43,7 +43,7 @@ Collision Actor::checkCollision()
 	while (cur != NULL)	//traverse the list until the end
 	{
 		if (this->GetPosition().x == cur->thisActor->GetPosition().x		//for collision both current actor and node should have
-			&& this->GetPosition().x == cur->thisActor->GetPosition().x		//same x,y and different adress pointer
+			&& this->GetPosition().y == cur->thisActor->GetPosition().y		//same x,y and different adress pointer
 			&& this != cur->thisActor)
 		{
 			C.Instigator = cur->thisActor;		//set the other actor as collision instigator
