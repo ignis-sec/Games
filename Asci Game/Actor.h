@@ -1,42 +1,23 @@
 #pragma once
+#include "List.h"
 #include "Engine.h"
-
-struct s_position {
-	int x;
-	int y;
-};
-
-enum Direction { RIGHT, UP, LEFT, DOWN, NONE };
-
-class Actor;
-
-struct s_Collision {
-	Direction Direction;
-	Actor* Instigator;
-};
-
 
 class Actor {
 public:
 
-	Actor(int x, int y,wchar_t tag,Direction Direction)
-	{
-		SetPosition(x, y);
-		m_tag = tag;
-		m_Direction = Direction;
-	}
+	Actor(int x, int y, wchar_t tag, Direction Direction);
+
 	virtual void ActorTick() {};
-	void checkCollision();
-	virtual void onCollision() {};
-	
-	struct s_position GetPosition() { return m_position; }
-	wchar_t GetTag() { return m_tag; }
+	virtual Collision checkCollision();
+	virtual void OnCollision() {};
 
 	int SetPosition(int x, int y);
 	int AddPosition(int dx, int dy);
-
 	void SetDirection(Direction D) { m_Direction = D; }
+
 	Direction GetDirection() { return m_Direction; }
+	position GetPosition() { return m_position; }
+	wchar_t GetTag() { return m_tag; }
 	
 private:
 	struct s_position m_position;
@@ -44,43 +25,60 @@ private:
 	Direction m_Direction;
 };
 
-void Actor::checkCollision()
+/////////////////////////
+Actor::Actor(int x, int y, wchar_t tag, Direction Direction)
 {
-
+	SetPosition(x, y);
+	m_tag = tag;
+	m_Direction = Direction;
 }
 
+/////////////////////////
+Collision Actor::checkCollision()
+{
+	struct s_node* cur = g_AllActors.head; //create pointer to start to the list containing all actors
+	Collision C;
+	C.Instigator = NULL;
+	C.Direction = LEFT;
+	while (cur != NULL)	//traverse the list until the end
+	{
+		if (this->GetPosition().x == cur->thisActor->GetPosition().x		//for collision both current actor and node should have
+			&& this->GetPosition().x == cur->thisActor->GetPosition().x		//same x,y and different adress pointer
+			&& this != cur->thisActor)
+		{
+			C.Instigator = cur->thisActor;		//set the other actor as collision instigator
+			C.Direction = this->GetDirection();	//set collision direction
+			OnCollision();						//do OnCollision actions if any
+			return C;
+		}
+		cur = cur->next;	//to next node
+	}
+	return C;
+}
+
+/////////////////////////
 int Actor::SetPosition(int x, int y)
 {
 	int tempx = m_position.x, tempy = m_position.y;
 	m_position.x = x;
 	m_position.y = y;
+	Collision C = checkCollision();			//set position check collision
 	return 0;
 
 }
 
+/////////////////////////
 int Actor::AddPosition(int dx, int dy)
 {
 	int tempx = m_position.x, tempy = m_position.y;
 	m_position.x += dx;
 	m_position.y += dy;
+	Collision C = checkCollision();
+	if (C.Instigator != NULL)			//if movement causes collision push actor back
+	{
+		m_position.x = tempx;
+		m_position.y = tempy;
+	}
 	return 0;
 
 }
-
-/*
-Collision AsciiEngine::isColliding(Actor* Actor)
-{
-	Collision C;
-	C.Instigator = NULL;
-
-	struct s_node* cur = m_AllActors.head;
-	while (cur != NULL)
-	{
-		if (cur->thisActor->GetPosition.x == Actor->GetPosition.x && cur->thisActor->GetPosition.x == Actor->GetPosition.x && cur->thisActor != Actor)
-
-			cur = cur->next;
-	}
-
-
-	return C;
-}*/

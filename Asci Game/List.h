@@ -1,6 +1,6 @@
 #pragma once
-#include "Actor.h"
 
+class Actor;
 struct s_node {
 	Actor* thisActor;
 	struct s_node* next;

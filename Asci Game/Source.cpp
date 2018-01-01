@@ -1,26 +1,7 @@
 
 #include "Engine.h"
 #include <Windows.h>
-
-class S :public Actor {
-public:
-	S(int x, int y,wchar_t tag,Direction Direction) : Actor(x, y, tag,Direction) { }
-	void ActorTick() {
-		switch (GetDirection()) {
-		case LEFT:AddPosition(-1, 0);
-			break;
-		case RIGHT:AddPosition(1, 0);
-			break;
-		case UP:AddPosition(0, -1);
-			break;
-		case DOWN:AddPosition(0, 1);
-			break;
-		}
-	}
-private:
-	Direction m_Direction;
-	wchar_t m_tag;
-};
+#include "ActorVariants.h"
 
 
 int main()
@@ -30,8 +11,12 @@ int main()
 	int nScreenHeight = 30;
 	AsciiEngine Engine(nScreenWidth, nScreenHeight);
 	
-	S s1(15,0, L'S',DOWN);
+	S s1(15,0, L'S',RIGHT);
 	Engine.AppendToActors(&s1);
+	R r1(35, 0, L'#', RIGHT);
+	Engine.AppendToActors(&r1);
+	R r2(5, 0, L'#', RIGHT);
+	Engine.AppendToActors(&r2);
 	Engine.StartGame();
 	return 0;
 }

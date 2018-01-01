@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="ActorVariants.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="List.h" />
   </ItemGroup>
