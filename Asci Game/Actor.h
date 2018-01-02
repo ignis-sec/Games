@@ -5,7 +5,7 @@
 class Actor {
 public:
 
-	Actor(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute);
+	Actor(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable);
 
 	virtual void ActorTick() {};
 	virtual Collision checkCollision();
@@ -24,6 +24,9 @@ public:
 	int getNFrames() { return m_nFrames; }
 	bool ShouldItTick() { incrementLife(); return !(m_life%m_nFrames); }
 	void setAttribute(WORD ATT) { m_Attribute = ATT; }
+	void illShowMyselfOut();
+	void CheckBoundaries();
+	bool isMobile() { return bMobile; }
 private:
 	int m_life;
 	int m_nFrames;
@@ -31,10 +34,12 @@ private:
 	wchar_t m_tag;
 	Direction m_Direction;
 	WORD m_Attribute;
+	bool bMobile = FALSE;
+
 };
 
 /////////////////////////
-Actor::Actor(int x, int y, wchar_t tag,int delay, Direction Direction, WORD Attribute)
+Actor::Actor(int x, int y, wchar_t tag,int delay, Direction Direction, WORD Attribute,bool bPushable)
 {
 	SetPosition(x, y);
 	m_tag = tag;
@@ -42,6 +47,7 @@ Actor::Actor(int x, int y, wchar_t tag,int delay, Direction Direction, WORD Attr
 	m_Attribute = Attribute;
 	m_life = 0;
 	m_nFrames = delay;
+	bMobile = bPushable;
 }
 
 /////////////////////////
@@ -74,6 +80,20 @@ int Actor::SetPosition(int x, int y)
 	m_position.x = x;
 	m_position.y = y;
 	Collision C = checkCollision();			//set position check collision
+	if (C.Instigator != NULL)
+	{
+		switch (C.Instigator->GetDirection()) {		//this actor moves 1 space to its direction every frame
+		case LEFT:AddPosition(1, 0);
+			break;
+		case RIGHT:AddPosition(-1, 0);
+			break;
+		case UP:AddPosition(0, 1);
+			break;
+		case DOWN:AddPosition(0, -1);
+			break;
+		}
+	}
+	CheckBoundaries();
 	return 0;
 
 }
@@ -81,15 +101,59 @@ int Actor::SetPosition(int x, int y)
 /////////////////////////
 int Actor::AddPosition(int dx, int dy)
 {
-	int tempx = m_position.x, tempy = m_position.y;
+	int tempx = m_position.x, tempy = m_position.y,tempx2,tempy2;
 	m_position.x += dx;
 	m_position.y += dy;
 	Collision C = checkCollision();
-	if (C.Instigator != NULL)			//if movement causes collision push actor back
+	if (C.Instigator !=NULL && !C.Instigator->isMobile() && !isMobile())			//if movement causes collision push actor back
 	{
 		SetPosition(tempx,tempy);
+	}
+	if (isMobile())	
+	{
+		tempx2 = m_position.x, tempy2 = m_position.y;
+		m_position.x += dx;
+		m_position.y += dy;
+		
+		Collision D = checkCollision();
+		if (D.Instigator != NULL) SetPosition(tempx, tempy);
+		else
+		SetPosition(tempx2, tempy2);
+		
 
 	}
+
+	CheckBoundaries();
 	return 0;
+
+}
+
+void Actor::illShowMyselfOut()
+{
+	struct s_node* prev = g_AllActors.head, *cur= g_AllActors.head->next;
+	if (prev->thisActor == this)
+	{
+		g_AllActors.head = g_AllActors.head->next;
+		//free(prev);
+		return;
+	}
+	while (cur != NULL)
+	{
+		if (cur->thisActor == this)
+		{
+			prev->next = cur->next;
+			//free(cur);
+			return;
+		}
+		prev = prev->next;
+		cur = cur->next;
+	}
+}
+void Actor::CheckBoundaries()
+{
+	if (GetPosition().x <0 || GetPosition().y <0 || GetPosition().x >nScreenWidth-1 || GetPosition().y >nScreenHeight-1)
+	{
+		illShowMyselfOut();
+	}
 
 }

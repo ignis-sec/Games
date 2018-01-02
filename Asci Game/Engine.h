@@ -5,7 +5,7 @@
 #include <thread>
 #include "List.h"
 
-int fpslock = 30; //max fps (game speed)
+int fpslock = 60; //max fps (game speed)
 
 #define  LPSTR          char*						//just to be safe about CreateConsoleBuffer
 #define  LPCSTR         const char*
@@ -27,7 +27,7 @@ struct s_position {
 };
 typedef struct s_position position;
 
-enum Direction { RIGHT=0, UP=1, LEFT=2, DOWN=3 };
+enum Direction { RIGHT=0, UP=1, LEFT=2, DOWN=3 ,FLAG};
 
 struct s_Collision {
 	Direction Direction;
@@ -56,7 +56,7 @@ private:
 	int m_nScreenHeight;
 };
  Actors g_AllActors;
-	
+ AsciiEngine* g_Engine;
 #include "Actor.h"
 
  /////////////////////
