@@ -11,13 +11,6 @@ int main()
 	int nScreenHeight = 30;
 	AsciiEngine Engine(nScreenWidth, nScreenHeight);
 	LoadLevel(&Engine);
-	/*S s1(15,0, L'S',RIGHT);
-	Engine.AppendToActors(&s1);
-	R r1(35, 0, L'#', RIGHT);
-	Engine.AppendToActors(&r1);
-	R r2(5, 0, L'#', RIGHT);
-	Engine.AppendToActors(&r2);f
-	*/
 	Engine.StartGame();
 	return 0;
 }

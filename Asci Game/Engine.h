@@ -43,8 +43,10 @@ private:
 	
 
 	wchar_t *screen;
+	WORD* screenatb;
 	HANDLE hConsole;
 	DWORD dwBytesWritten;
+	DWORD dwAttrWritten;
 	int m_nScreenWidth;
 	int m_nScreenHeight;
 };
@@ -57,10 +59,13 @@ AsciiEngine::AsciiEngine(int nScreenWidth, int nScreenHeight)
 {
 	//this creates screen Buffer
 	screen = new wchar_t[nScreenWidth*nScreenHeight];
+	screenatb = new WORD[nScreenWidth*nScreenHeight];
 	for (int i = 0; i < nScreenWidth*nScreenHeight; i++) screen[i] = L' ';
+	for (int j = 0; j < nScreenWidth*nScreenHeight; j++) screenatb[j] = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED;
 	hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
 	SetConsoleActiveScreenBuffer(hConsole);
 	dwBytesWritten = 0;
+	dwAttrWritten = 0;
 	m_nScreenHeight = nScreenHeight;
 	m_nScreenWidth = nScreenWidth;
 	g_AllActors.head = g_AllActors.tail = NULL;
@@ -98,11 +103,20 @@ void AsciiEngine::DrawFrame()
 void AsciiEngine::ComposeFrame()
 {
 	struct s_node* cur = g_AllActors.head;
+	COORD tempCOORD;
 	for (int i = 0; i < m_nScreenWidth*m_nScreenHeight-1; i++) screen[i] =L' '; //fill the buffer with empty space
 	while (cur != NULL)					//traverse the list containing every actor
 	{
 		screen[cur->thisActor->GetPosition().x + cur->thisActor->GetPosition().y*m_nScreenWidth] = cur->thisActor->GetTag();
-																	//insert each actors tag to the appropriate coordinates.
+		tempCOORD.X = cur->thisActor->GetPosition().x;					//insert each actors tag to the appropriate coordinates.
+		tempCOORD.Y = cur->thisActor->GetPosition().y;
+		WriteConsoleOutputAttribute(
+			hConsole,						//handle
+			screenatb,						//Attribute
+			m_nScreenWidth*m_nScreenHeight,	//length
+			{0,0},							//struct _COORD from WINAPI
+			&dwAttrWritten);				//reference to number of attributes written
+
 		cur = cur->next;
 	}
 }
