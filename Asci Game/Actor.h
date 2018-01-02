@@ -105,23 +105,11 @@ int Actor::AddPosition(int dx, int dy)
 	m_position.x += dx;
 	m_position.y += dy;
 	Collision C = checkCollision();
-	if (C.Instigator !=NULL && !C.Instigator->isMobile() && !isMobile())			//if movement causes collision push actor back
+	if (C.Instigator !=NULL && !C.Instigator->isMobile())			//if movement causes collision push actor back
 	{
 		SetPosition(tempx,tempy);
 	}
-	if (isMobile())	
-	{
-		tempx2 = m_position.x, tempy2 = m_position.y;
-		m_position.x += dx;
-		m_position.y += dy;
-		
-		Collision D = checkCollision();
-		if (D.Instigator != NULL) SetPosition(tempx, tempy);
-		else
-		SetPosition(tempx2, tempy2);
-		
 
-	}
 
 	CheckBoundaries();
 	return 0;

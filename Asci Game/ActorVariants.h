@@ -115,6 +115,7 @@ public:
 	}
 
 	void OnCollision(Collision C) {
+		bool bObstructed = FALSE;
 		int x=GetPosition().x, y = GetPosition().y;
 		switch (C.Direction) {		//this actor moves 1 space to its direction every frame
 		case LEFT:x--;
@@ -146,22 +147,23 @@ public:
 					case DOWN: ThisPlayer->AddPosition(0, -1);
 						break;
 					}
+					bObstructed = TRUE;
 					break;
 				}
-				else {
-					switch (C.Direction) {
-					case LEFT:AddPosition(-1, 0);
-						break;
-					case RIGHT:AddPosition(1, 0);
-						break;
-					case UP:AddPosition(0, -1);
-						break;
-					case DOWN:AddPosition(0, 1);
-						break;
-					}
-					break;
-				}
+				
 				cur = cur->next;	//to next node
+			}
+			if (!bObstructed) {
+				switch (C.Direction) {
+				case LEFT:AddPosition(-1, 0);
+					break;
+				case RIGHT:AddPosition(1, 0);
+					break;
+				case UP:AddPosition(0, -1);
+					break;
+				case DOWN:AddPosition(0, 1);
+					break;
+				}
 			}
 		}
 		
