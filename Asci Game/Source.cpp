@@ -1,4 +1,5 @@
 
+#define BACKGROUND NULL
 #include "Engine.h"
 #include <Windows.h>
 #include "ActorVariants.h"
@@ -6,7 +7,6 @@
 
 int main()
 {
-	SetConsoleTitle("Ascii Engine");
 	int nScreenWidth = 120;
 	int nScreenHeight = 30;
 	AsciiEngine Engine(nScreenWidth, nScreenHeight);

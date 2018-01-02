@@ -1,9 +1,11 @@
 #pragma once
-
+#include <ctime>
 #include <iostream>
 #include <Windows.h>
 #include <thread>
 #include "List.h"
+
+int fpslock = 180; //max fps (game speed)
 
 #define  LPSTR          char*						//just to be safe about CreateConsoleBuffer
 #define  LPCSTR         const char*
@@ -51,7 +53,7 @@ private:
 	int m_nScreenHeight;
 };
  Actors g_AllActors;
- int frameDelay=100;
+	
 #include "Actor.h"
 
  /////////////////////
@@ -61,7 +63,7 @@ AsciiEngine::AsciiEngine(int nScreenWidth, int nScreenHeight)
 	screen = new wchar_t[nScreenWidth*nScreenHeight];
 	screenatb = new WORD[nScreenWidth*nScreenHeight];
 	for (int i = 0; i < nScreenWidth*nScreenHeight; i++) screen[i] = L' ';
-	for (int j = 0; j < nScreenWidth*nScreenHeight; j++) screenatb[j] = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED;
+	for (int j = 0; j < nScreenWidth*nScreenHeight; j++) screenatb[j] = BACKGROUND;
 	hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
 	SetConsoleActiveScreenBuffer(hConsole);
 	dwBytesWritten = 0;
@@ -73,12 +75,29 @@ AsciiEngine::AsciiEngine(int nScreenWidth, int nScreenHeight)
 }
 /////////////////////
 void AsciiEngine::StartGame() {
+	char title[50];
+	char name[50] = "Ascii Engine ";
+	char fps[15] = "(FPS:";
+	char fpsf[10];
+	double framelength=0;
+	double frameDelay = 1000.0 / (double)fpslock;
 	while (1)			//basically game loop
 	{
+		clock_t begin = clock();					//This part composes window title and frame counter
+		strcpy(title, "");							//
+		strcpy(fpsf, "");							//
+		sprintf(fpsf, "%.2lf", 1.0/framelength);	//
+		strcat(title,name);							//
+		strcat(title, fps);							//
+		strcat(title, fpsf);						//
+		strcat(title, ") ");						//
+		SetConsoleTitle(title);
 		tick();					//plays every actors ActorTick
 		ComposeFrame();			//creates screen buffer
 		DrawFrame();			//prints the screen buffer to console
-		Sleep(frameDelay);	
+		Sleep(frameDelay);
+		clock_t end = clock();
+		framelength = ((double)end - (double)begin) / (double)CLOCKS_PER_SEC;
 	}
 }
 
@@ -96,7 +115,20 @@ void AsciiEngine::tick()
 /////////////////////
 void AsciiEngine::DrawFrame()
 {
-	WriteConsoleOutputCharacterW(hConsole, screen, m_nScreenWidth * m_nScreenHeight, { 0,0 }, &dwBytesWritten);	//prints screen buffer
+	WriteConsoleOutputAttribute(
+		hConsole,						//handle
+		screenatb,						//Attribute
+		m_nScreenWidth*m_nScreenHeight,	//length
+		{ 0,0 },						//struct _COORD from WINAPI
+		&dwAttrWritten);				//reference to number of attributes written
+
+	WriteConsoleOutputCharacterW(					//prints screen buffer
+		hConsole,						//handle
+		screen,							//characters
+		m_nScreenWidth*m_nScreenHeight, //size
+		{ 0,0 },						//struct _COORD from WINAPI
+		&dwBytesWritten);				//reference to number of bytes written
+	
 }
 
 /////////////////////
@@ -105,17 +137,12 @@ void AsciiEngine::ComposeFrame()
 	struct s_node* cur = g_AllActors.head;
 	COORD tempCOORD;
 	for (int i = 0; i < m_nScreenWidth*m_nScreenHeight-1; i++) screen[i] =L' '; //fill the buffer with empty space
+	for (int j = 0; j < m_nScreenWidth*m_nScreenHeight - 1; j++) screenatb[j] = BACKGROUND; //fill the buffer with empty space
 	while (cur != NULL)					//traverse the list containing every actor
 	{
 		screen[cur->thisActor->GetPosition().x + cur->thisActor->GetPosition().y*m_nScreenWidth] = cur->thisActor->GetTag();
-		tempCOORD.X = cur->thisActor->GetPosition().x;					//insert each actors tag to the appropriate coordinates.
-		tempCOORD.Y = cur->thisActor->GetPosition().y;
-		WriteConsoleOutputAttribute(
-			hConsole,						//handle
-			screenatb,						//Attribute
-			m_nScreenWidth*m_nScreenHeight,	//length
-			{0,0},							//struct _COORD from WINAPI
-			&dwAttrWritten);				//reference to number of attributes written
+		screenatb[cur->thisActor->GetPosition().x + cur->thisActor->GetPosition().y*m_nScreenWidth] = cur->thisActor->GetAttribute();
+		
 
 		cur = cur->next;
 	}

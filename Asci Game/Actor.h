@@ -5,7 +5,7 @@
 class Actor {
 public:
 
-	Actor(int x, int y, wchar_t tag, Direction Direction);
+	Actor(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute);
 
 	virtual void ActorTick() {};
 	virtual Collision checkCollision();
@@ -18,19 +18,30 @@ public:
 	Direction GetDirection() { return m_Direction; }
 	position GetPosition() { return m_position; }
 	wchar_t GetTag() { return m_tag; }
+	WORD GetAttribute() { return m_Attribute; }
+	int getLife() { return m_life; }
+	void incrementLife() { m_life++; }
+	int getNFrames() { return m_nFrames; }
+	bool ShouldItTick() { incrementLife(); return !(m_life%m_nFrames); }
 	
 private:
+	int m_life;
+	int m_nFrames;
 	struct s_position m_position;
 	wchar_t m_tag;
 	Direction m_Direction;
+	WORD m_Attribute;
 };
 
 /////////////////////////
-Actor::Actor(int x, int y, wchar_t tag, Direction Direction)
+Actor::Actor(int x, int y, wchar_t tag,int delay, Direction Direction, WORD Attribute)
 {
 	SetPosition(x, y);
 	m_tag = tag;
 	m_Direction = Direction;
+	m_Attribute = Attribute;
+	m_life = 0;
+	m_nFrames = delay;
 }
 
 /////////////////////////
