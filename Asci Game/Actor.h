@@ -9,7 +9,7 @@ public:
 
 	virtual void ActorTick() {};
 	virtual Collision checkCollision();
-	virtual void OnCollision() {};
+	virtual void OnCollision(Collision C) {};
 
 	int SetPosition(int x, int y);
 	int AddPosition(int dx, int dy);
@@ -23,7 +23,7 @@ public:
 	void incrementLife() { m_life++; }
 	int getNFrames() { return m_nFrames; }
 	bool ShouldItTick() { incrementLife(); return !(m_life%m_nFrames); }
-	
+	void setAttribute(WORD ATT) { m_Attribute = ATT; }
 private:
 	int m_life;
 	int m_nFrames;
@@ -59,7 +59,7 @@ Collision Actor::checkCollision()
 		{
 			C.Instigator = cur->thisActor;		//set the other actor as collision instigator
 			C.Direction = this->GetDirection();	//set collision direction
-			OnCollision();						//do OnCollision actions if any
+			OnCollision(C);						//do OnCollision actions if any
 			return C;
 		}
 		cur = cur->next;	//to next node
@@ -87,8 +87,8 @@ int Actor::AddPosition(int dx, int dy)
 	Collision C = checkCollision();
 	if (C.Instigator != NULL)			//if movement causes collision push actor back
 	{
-		m_position.x = tempx;
-		m_position.y = tempy;
+		SetPosition(tempx,tempy);
+
 	}
 	return 0;
 

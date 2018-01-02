@@ -44,12 +44,15 @@ void LoadLevel(AsciiEngine* Engine)
 			w = 0;
 			break;
 		case 'R':
-			Engine->AppendToActors(new R(w, h, L'#',5, LEFT, 0x0E | BACKGROUND));
+			Engine->AppendToActors(new R(w, h, L'#',500, LEFT, 0x0E | BACKGROUND));
 			break;
 		case 'S':
-			Engine->AppendToActors(new S(w, h, L'S',5, LEFT,  FOREGROUND_GREEN | BACKGROUND));
+			Engine->AppendToActors(new S(w, h, L'S',3, LEFT,  FOREGROUND_GREEN | BACKGROUND));
 			break;
+		case 'P':
+			Engine->AppendToActors(new Player(w, h, L'X', 3, LEFT, 0x0B | BACKGROUND));
 		}
 	}
+	Level.close();
 
 }

@@ -5,7 +5,7 @@
 #include <thread>
 #include "List.h"
 
-int fpslock = 180; //max fps (game speed)
+int fpslock = 30; //max fps (game speed)
 
 #define  LPSTR          char*						//just to be safe about CreateConsoleBuffer
 #define  LPCSTR         const char*
@@ -16,6 +16,9 @@ int fpslock = 180; //max fps (game speed)
 #define  LPTSTR         TCHAR*
 #define  LPCTSTR        const TCHAR* 
 
+class Player;
+Player* ThisPlayer;
+int g_HP;
 class Actor;
 
 struct s_position {
@@ -73,15 +76,17 @@ AsciiEngine::AsciiEngine(int nScreenWidth, int nScreenHeight)
 	g_AllActors.head = g_AllActors.tail = NULL;
 
 }
+char title[50];
 /////////////////////
 void AsciiEngine::StartGame() {
-	char title[50];
+
 	char name[50] = "Ascii Engine ";
-	char fps[15] = "(FPS:";
+	char fps[15] = "(FPS: ";
 	char fpsf[10];
+	char hp[5] = "HP: ";
 	double framelength=0;
-	double frameDelay = 1000.0 / (double)fpslock;
-	while (1)			//basically game loop
+	double frameDelay = (double)1000.0 / (double)fpslock;
+	while (g_HP>0)			//basically game loop
 	{
 		clock_t begin = clock();					//This part composes window title and frame counter
 		strcpy(title, "");							//
@@ -91,6 +96,9 @@ void AsciiEngine::StartGame() {
 		strcat(title, fps);							//
 		strcat(title, fpsf);						//
 		strcat(title, ") ");						//
+		strcat(title, hp);
+		for (int i = 0; i < g_HP; i++)
+			strcat(title, "*");
 		SetConsoleTitle(title);
 		tick();					//plays every actors ActorTick
 		ComposeFrame();			//creates screen buffer
@@ -158,7 +166,8 @@ void AsciiEngine::AppendToActors(Actor* newActor) {	//get freshly created actor 
 }
 
 
-
+#include "Player.h"
+#include "ActorVariants.h"
 
 
 

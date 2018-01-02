@@ -23,7 +23,13 @@ public:
 		
 	}
 
-	void OnCollision(){
+	void OnCollision(Collision C){
+		if (C.Instigator == (Actor*)ThisPlayer)
+		{
+			C.Instigator = this;		//if you hit player tell it you are the instigator and forward the collision struct
+			ThisPlayer->OnCollision(C);
+			return;
+		}
 		switch (GetDirection())		//if it collides with something it turns to the opposite direction
 		{
 		case RIGHT:		SetDirection(LEFT);
