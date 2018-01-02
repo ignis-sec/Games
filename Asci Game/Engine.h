@@ -73,16 +73,16 @@ AsciiEngine::AsciiEngine(int nScreenWidth, int nScreenHeight)
 	dwAttrWritten = 0;
 	m_nScreenHeight = nScreenHeight;
 	m_nScreenWidth = nScreenWidth;
-	g_AllActors.head = g_AllActors.tail = NULL;
+	g_AllActors.head = g_AllActors.tail = NULL; //initialize actors list
 
 }
 char title[50];
 /////////////////////
 void AsciiEngine::StartGame() {
 
-	char name[50] = "Ascii Engine ";
-	char fps[15] = "(FPS: ";
-	char fpsf[10];
+	char name[50] = "Ascii Engine ";//
+	char fps[15] = "(FPS: ";		//
+	char fpsf[10];					//
 	char hp[5] = "HP: ";
 	double framelength=0;
 	double frameDelay = (double)1000.0 / (double)fpslock;
@@ -105,7 +105,7 @@ void AsciiEngine::StartGame() {
 		DrawFrame();			//prints the screen buffer to console
 		Sleep(frameDelay);
 		clock_t end = clock();
-		framelength = ((double)end - (double)begin) / (double)CLOCKS_PER_SEC;
+		framelength = ((double)end - (double)begin) / (double)CLOCKS_PER_SEC;	//this calculates length of a frame from tick start to end of delay
 	}
 }
 
@@ -143,13 +143,12 @@ void AsciiEngine::DrawFrame()
 void AsciiEngine::ComposeFrame()
 {
 	struct s_node* cur = g_AllActors.head;
-	COORD tempCOORD;
 	for (int i = 0; i < m_nScreenWidth*m_nScreenHeight-1; i++) screen[i] =L' '; //fill the buffer with empty space
 	for (int j = 0; j < m_nScreenWidth*m_nScreenHeight - 1; j++) screenatb[j] = BACKGROUND; //fill the buffer with empty space
 	while (cur != NULL)					//traverse the list containing every actor
 	{
-		screen[cur->thisActor->GetPosition().x + cur->thisActor->GetPosition().y*m_nScreenWidth] = cur->thisActor->GetTag();
-		screenatb[cur->thisActor->GetPosition().x + cur->thisActor->GetPosition().y*m_nScreenWidth] = cur->thisActor->GetAttribute();
+		screen[cur->thisActor->GetPosition().x + cur->thisActor->GetPosition().y*m_nScreenWidth] = cur->thisActor->GetTag(); //set position of actor to its tag
+		screenatb[cur->thisActor->GetPosition().x + cur->thisActor->GetPosition().y*m_nScreenWidth] = cur->thisActor->GetAttribute();	//and its attribute
 		
 
 		cur = cur->next;

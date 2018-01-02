@@ -5,7 +5,7 @@
 class Actor {
 public:
 
-	Actor(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable);
+	Actor(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable,bool bCollidable);
 
 	virtual void ActorTick() {};
 	virtual Collision checkCollision();
@@ -26,7 +26,8 @@ public:
 	void setAttribute(WORD ATT) { m_Attribute = ATT; }
 	void illShowMyselfOut();
 	void CheckBoundaries();
-	bool isMobile() { return bMobile; }
+	bool isMobile() { return m_bMobile; }
+	bool isCollidable() { return m_bCollidable; }
 private:
 	int m_life;
 	int m_nFrames;
@@ -34,12 +35,13 @@ private:
 	wchar_t m_tag;
 	Direction m_Direction;
 	WORD m_Attribute;
-	bool bMobile = FALSE;
+	bool m_bMobile;
+	bool m_bCollidable;
 
 };
 
 /////////////////////////
-Actor::Actor(int x, int y, wchar_t tag,int delay, Direction Direction, WORD Attribute,bool bPushable)
+Actor::Actor(int x, int y, wchar_t tag,int delay, Direction Direction, WORD Attribute,bool bPushable, bool bCollidable)
 {
 	SetPosition(x, y);
 	m_tag = tag;
@@ -47,7 +49,13 @@ Actor::Actor(int x, int y, wchar_t tag,int delay, Direction Direction, WORD Attr
 	m_Attribute = Attribute;
 	m_life = 0;
 	m_nFrames = delay;
-	bMobile = bPushable;
+	m_bMobile = bPushable;
+	Collision C = checkCollision();
+	m_bCollidable = bCollidable;
+	if (C.Instigator != NULL)	//if spawn point is full get out
+	{
+		illShowMyselfOut();
+	}
 }
 
 /////////////////////////
@@ -65,7 +73,8 @@ Collision Actor::checkCollision()
 		{
 			C.Instigator = cur->thisActor;		//set the other actor as collision instigator
 			C.Direction = this->GetDirection();	//set collision direction
-			OnCollision(C);						//do OnCollision actions if any
+			if(C.Instigator->isCollidable())
+				OnCollision(C);						//do OnCollision actions if any
 			return C;
 		}
 		cur = cur->next;	//to next node
@@ -93,7 +102,7 @@ int Actor::SetPosition(int x, int y)
 			break;
 		}
 	}
-	CheckBoundaries();
+	CheckBoundaries();	//check if you are still inside the map
 	return 0;
 
 }
@@ -101,31 +110,31 @@ int Actor::SetPosition(int x, int y)
 /////////////////////////
 int Actor::AddPosition(int dx, int dy)
 {
-	int tempx = m_position.x, tempy = m_position.y,tempx2,tempy2;
+	int tempx = m_position.x, tempy = m_position.y;
 	m_position.x += dx;
 	m_position.y += dy;
 	Collision C = checkCollision();
 	if (C.Instigator !=NULL && !C.Instigator->isMobile())			//if movement causes collision push actor back
 	{
-		SetPosition(tempx,tempy);
+		SetPosition(tempx,tempy);	//undo the movement if you are colliding
 	}
 
 
-	CheckBoundaries();
+	CheckBoundaries();//check if you are still inside the map
 	return 0;
 
 }
 
-void Actor::illShowMyselfOut()
+void Actor::illShowMyselfOut()		//destroy actor
 {
 	struct s_node* prev = g_AllActors.head, *cur= g_AllActors.head->next;
-	if (prev->thisActor == this)
+	if (prev->thisActor == this)		//if its the first one in linked list 
 	{
 		g_AllActors.head = g_AllActors.head->next;
 		//free(prev);
 		return;
 	}
-	while (cur != NULL)
+	while (cur != NULL)					//and if it is not
 	{
 		if (cur->thisActor == this)
 		{
@@ -137,7 +146,7 @@ void Actor::illShowMyselfOut()
 		cur = cur->next;
 	}
 }
-void Actor::CheckBoundaries()
+void Actor::CheckBoundaries()	//this function checks if actor is still within the map
 {
 	if (GetPosition().x <0 || GetPosition().y <0 || GetPosition().x >nScreenWidth-1 || GetPosition().y >nScreenHeight-1)
 	{

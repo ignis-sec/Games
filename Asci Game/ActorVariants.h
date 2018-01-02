@@ -4,8 +4,8 @@
 class S :public Actor {
 public:
 
-	S(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag,delay, Direction, Attribute,bPushable) { } //inherits constructor from Actor base class
-
+	//S(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag,delay, Direction, Attribute,bPushable) { } //inherits constructor from Actor base class
+	using Actor::Actor;
 	void ActorTick() {
 		if (ShouldItTick())
 		{
@@ -47,7 +47,8 @@ public:
 
 class R :public Actor {		//this actor doesnt move, its just a boulder to collide with
 public:
-	R(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag,delay, Direction, Attribute, bPushable) { }
+	//R(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag,delay, Direction, Attribute, bPushable) { }
+	using Actor::Actor;
 private:
 	Direction m_Direction;
 	wchar_t m_tag;
@@ -56,8 +57,8 @@ private:
 class O :public Actor {
 public:
 
-	O(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag, delay, Direction, Attribute, bPushable) { } //inherits constructor from Actor base class
-
+	//O(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag, delay, Direction, Attribute, bPushable) { } //inherits constructor from Actor base class
+	using Actor::Actor;
 	void ActorTick() {
 		if (ShouldItTick())
 		{
@@ -87,15 +88,15 @@ public:
 };
 
 
-class T :public Actor {
+class T :public Actor {	//this actor spawns ʚ's to shoot
 public:
 
-	T(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag, delay, Direction, Attribute, bPushable) { } //inherits constructor from Actor base class
-
+	//T(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag, delay, Direction, Attribute, bPushable) { } //inherits constructor from Actor base class
+	using Actor::Actor;
 	void ActorTick() {
 		if (ShouldItTick())
 		{
-			g_Engine->AppendToActors(new O(GetPosition().x, GetPosition().y+1, L'ʚ', 10, DOWN, FOREGROUND_INTENSITY | FOREGROUND_RED | BACKGROUND,TRUE));
+			g_Engine->AppendToActors(new O(GetPosition().x, GetPosition().y+1, L'ʚ', 5, DOWN, FOREGROUND_INTENSITY | FOREGROUND_RED | BACKGROUND,TRUE,FALSE));
 		}
 
 	}
@@ -105,11 +106,11 @@ public:
 	}
 };
 
-class Q :public Actor {
+class Q :public Actor {	//this is pushable blocks
 public:
 
-	Q(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag, delay, Direction, Attribute, bPushable) {  } //inherits constructor from Actor base class
-
+	//Q(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag, delay, Direction, Attribute, bPushable) {  } //inherits constructor from Actor base class
+	using Actor::Actor;
 	void ActorTick() {
 	
 	}
@@ -117,7 +118,7 @@ public:
 	void OnCollision(Collision C) {
 		bool bObstructed = FALSE;
 		int x=GetPosition().x, y = GetPosition().y;
-		switch (C.Direction) {		//this actor moves 1 space to its direction every frame
+		switch (C.Direction) {		//get the position you are being tried to pushed to
 		case LEFT:x--;
 			break;
 		case RIGHT:x++;
@@ -128,7 +129,7 @@ public:
 			break;
 		}
 
-		if (C.Instigator == ThisPlayer)
+		if (C.Instigator == ThisPlayer)	//and only if player is pushing you		
 		{
 			struct s_node* cur = g_AllActors.head; //create pointer to start to the list containing all actors
 			while (cur != NULL)						//traverse the list until the end
@@ -137,7 +138,7 @@ public:
 					&& y == cur->thisActor->GetPosition().y		//same x,y and different adress pointer
 					)
 				{
-					switch (C.Direction) {		//this actor moves 1 space to its direction every frame
+					switch (C.Direction) {		//if you are obstructed tell the player to back off
 					case LEFT:ThisPlayer->AddPosition(1, 0);
 						break;
 					case RIGHT:ThisPlayer->AddPosition(-1, 0);
@@ -153,7 +154,7 @@ public:
 				
 				cur = cur->next;	//to next node
 			}
-			if (!bObstructed) {
+			if (!bObstructed) {			//and undo the movement you did
 				switch (C.Direction) {
 				case LEFT:AddPosition(-1, 0);
 					break;
@@ -175,8 +176,8 @@ private:
 class J :public Actor {
 public:
 
-	J(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag, delay, Direction, Attribute, bPushable) { } //inherits constructor from Actor base class
-
+	//J(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag, delay, Direction, Attribute, bPushable) { } //inherits constructor from Actor base class
+	using Actor::Actor;
 	void ActorTick() {
 		if (ShouldItTick())
 		{
@@ -201,7 +202,7 @@ public:
 			ThisPlayer->OnCollision(C);
 			return;
 		}
-		switch (GetDirection())		//if it collides with something it turns to the opposite direction
+		switch (GetDirection())		//if it collides with something it turns to the left
 		{
 		case RIGHT:		SetDirection(UP);
 			break;
