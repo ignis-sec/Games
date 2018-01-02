@@ -115,17 +115,56 @@ public:
 	}
 
 	void OnCollision(Collision C) {
-		if(C.Instigator==ThisPlayer)
-			switch (C.Direction) {		//this actor moves 1 space to its direction every frame
-			case LEFT:AddPosition(-1, 0);
-				break;
-			case RIGHT:AddPosition(1, 0);
-				break;
-			case UP:AddPosition(0, -1);
-				break;
-			case DOWN:AddPosition(0, 1);
-				break;
+		int x=GetPosition().x, y = GetPosition().y;
+		switch (C.Direction) {		//this actor moves 1 space to its direction every frame
+		case LEFT:x--;
+			break;
+		case RIGHT:x++;
+			break;
+		case UP:y--;
+			break;
+		case DOWN:y++;
+			break;
+		}
+
+		if (C.Instigator == ThisPlayer)
+		{
+			struct s_node* cur = g_AllActors.head; //create pointer to start to the list containing all actors
+			while (cur != NULL)						//traverse the list until the end
+			{
+				if (x == cur->thisActor->GetPosition().x		//for collision both current actor and node should have
+					&& y == cur->thisActor->GetPosition().y		//same x,y and different adress pointer
+					)
+				{
+					switch (C.Direction) {		//this actor moves 1 space to its direction every frame
+					case LEFT:ThisPlayer->AddPosition(1, 0);
+						break;
+					case RIGHT:ThisPlayer->AddPosition(-1, 0);
+						break;
+					case UP:ThisPlayer->AddPosition(0, 1);
+						break;
+					case DOWN: ThisPlayer->AddPosition(0, -1);
+						break;
+					}
+					break;
+				}
+				else {
+					switch (C.Direction) {
+					case LEFT:AddPosition(-1, 0);
+						break;
+					case RIGHT:AddPosition(1, 0);
+						break;
+					case UP:AddPosition(0, -1);
+						break;
+					case DOWN:AddPosition(0, 1);
+						break;
+					}
+					break;
+				}
+				cur = cur->next;	//to next node
 			}
+		}
+		
 	}
 private:
 

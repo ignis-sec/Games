@@ -1,7 +1,7 @@
 #pragma once
 #include <ctime>
-#include <iostream>
 #include <Windows.h>
+#include <iostream>
 #include <thread>
 #include "List.h"
 
