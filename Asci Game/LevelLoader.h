@@ -50,13 +50,19 @@ void LoadLevel(AsciiEngine* Engine)
 			Engine->AppendToActors(new S(w, h, L'S',3, LEFT,  FOREGROUND_GREEN | BACKGROUND, FALSE));
 			break;
 		case 'P':
-			Engine->AppendToActors(new Player(w, h, L'X', 3, LEFT, 0x0B | BACKGROUND));
+			Engine->AppendToActors(new Player(w, h, L'X', 5, LEFT, 0x0B | BACKGROUND));
 			break;
 		case 'T':
 			Engine->AppendToActors(new T(w, h, L'T', 30, LEFT, FOREGROUND_GREEN | BACKGROUND, FALSE));
 			break;
 		case 'Q':
-			Engine->AppendToActors(new Q(w, h, L'Q', 30, LEFT, FOREGROUND_GREEN | BACKGROUND, TRUE));
+			Engine->AppendToActors(new Q(w, h, L'ǒ', 30, LEFT, 0x09 | BACKGROUND, TRUE));
+			break;
+		case 'J':
+			Engine->AppendToActors(new J(w, h, L'ɕ', 5, DOWN, 0x0F | BACKGROUND, TRUE));
+			break;
+		case 'I':
+			Engine->AppendToActors(new S(w, h, L'S', 3, DOWN, 0x0F | BACKGROUND, TRUE));
 			break;
 
 		}

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Engine.h"
 
 class Player : public Actor {
@@ -56,7 +56,7 @@ public:
 			if (
 				C.Instigator->GetTag() != L'#' &&
 				C.Instigator->GetTag() != L'T' &&
-				C.Instigator->GetTag() != L'Q'
+				C.Instigator->GetTag() != L'ǒ'
 				) { decreaseHP(); }
 
 			if (C.Instigator->isMobile())
@@ -76,7 +76,7 @@ public:
 	int getFramesNotHit() { return m_framesNotHit; }
 	void incrementFNH() { m_framesNotHit++; }
 private:
-	int m_hp = 8;
+	int m_hp = 3;
 	int m_framesNotHit = 30;
 };
 

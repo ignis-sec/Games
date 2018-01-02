@@ -5,7 +5,7 @@
 #include <thread>
 #include "List.h"
 
-int fpslock = 60; //max fps (game speed)
+int fpslock = 120; //max fps (game speed)
 
 #define  LPSTR          char*						//just to be safe about CreateConsoleBuffer
 #define  LPCSTR         const char*
