@@ -44,28 +44,28 @@ void LoadLevel(AsciiEngine* Engine)
 			w = 0;
 			break;
 		case 'R':
-			Engine->AppendToActors(new R(w, h, L'#', 500, LEFT, 0x0E | BACKGROUND, FALSE,TRUE));
+			Engine->AppendToActors(new R(w, h, L'#', 500, LEFT, 0x0E , FALSE,TRUE));
 			break;
 		case 'S':
-			Engine->AppendToActors(new S(w, h, L'S',3, LEFT,  FOREGROUND_GREEN | BACKGROUND, FALSE, TRUE));
+			Engine->AppendToActors(new S(w, h, L'S',3, LEFT,  FOREGROUND_GREEN , FALSE, TRUE));
 			break;
 		case 'P':
-			Engine->AppendToActors(new Player(w, h, L'X', 5, LEFT, 0x0B | BACKGROUND));
+			Engine->AppendToActors(new Player(w, h, L'X', 5, LEFT, 0x0B ));
 			break;
 		case 'T':	
-			Engine->AppendToActors(new T(w, h, L'T', 30, LEFT, FOREGROUND_GREEN | BACKGROUND, FALSE, TRUE));
+			Engine->AppendToActors(new T(w, h, L'T', 30, LEFT, FOREGROUND_GREEN , FALSE, TRUE));
 			break;
 		case 'Q':
-			Engine->AppendToActors(new Q(w, h, L'ǒ', 30, LEFT, 0x09 | BACKGROUND, TRUE, TRUE));
+			Engine->AppendToActors(new Q(w, h, L'ǒ', 30, LEFT, 0x09 , TRUE, TRUE));
 			break;
 		case 'J':
-			Engine->AppendToActors(new J(w, h, L'ɕ', 5, DOWN, 0x0F | BACKGROUND, TRUE, TRUE));
+			Engine->AppendToActors(new J(w, h, L'ɕ', 5, DOWN, 0x0F , TRUE, TRUE));
 			break;
 		case 'I':
-			Engine->AppendToActors(new S(w, h, L'S', 3, DOWN, 0x0F | BACKGROUND, TRUE, TRUE));
+			Engine->AppendToActors(new S(w, h, L'S', 3, DOWN, 0x0F , TRUE, TRUE));
 			break;
 		case 'Ş':
-			Engine->AppendToActors(new S(w, h, L'S', 1, LEFT, FOREGROUND_GREEN | BACKGROUND, FALSE, TRUE));
+			Engine->AppendToActors(new S(w, h, L'S', 1, LEFT, FOREGROUND_GREEN , FALSE, TRUE));
 			break;
 
 		}

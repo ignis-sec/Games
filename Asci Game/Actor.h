@@ -22,7 +22,7 @@ public:
 	int getLife() { return m_life; }
 	void incrementLife() { m_life++; }
 	int getNFrames() { return m_nFrames; }
-	bool ShouldItTick() { incrementLife(); return !(m_life%m_nFrames); }
+	bool ShouldItTick() { incrementLife(); return !(m_life%(m_nFrames*delayMultip)); }
 	void setAttribute(WORD ATT) { m_Attribute = ATT; }
 	void illShowMyselfOut();
 	void CheckBoundaries();
@@ -52,6 +52,7 @@ Actor::Actor(int x, int y, wchar_t tag,int delay, Direction Direction, WORD Attr
 	m_bMobile = bPushable;
 	Collision C = checkCollision();
 	m_bCollidable = bCollidable;
+	m_position.onScreenPos = m_position.x + m_position.y*nScreenWidth;
 	if (C.Instigator != NULL)	//if spawn point is full get out
 	{
 		illShowMyselfOut();
@@ -67,9 +68,9 @@ Collision Actor::checkCollision()
 	C.Direction = LEFT;
 	while (cur != NULL)	//traverse the list until the end
 	{
-		if (this->GetPosition().x == cur->thisActor->GetPosition().x		//for collision both current actor and node should have
-			&& this->GetPosition().y == cur->thisActor->GetPosition().y		//same x,y and different adress pointer
-			&& this != cur->thisActor)
+		if (this->GetPosition().x == cur->thisActor->GetPosition().x)		//for collision both current actor and node should have
+			if(this->GetPosition().y == cur->thisActor->GetPosition().y) 		//same x,y and different adress pointer
+				if(this != cur->thisActor)
 		{
 			C.Instigator = cur->thisActor;		//set the other actor as collision instigator
 			C.Direction = this->GetDirection();	//set collision direction
@@ -88,10 +89,11 @@ int Actor::SetPosition(int x, int y)
 	int tempx = m_position.x, tempy = m_position.y;
 	m_position.x = x;
 	m_position.y = y;
-	Collision C = checkCollision();			//set position check collision
+	m_position.onScreenPos = m_position.x + m_position.y*nScreenWidth;
+	/*Collision C = checkCollision();			//set position check collision
 	if (C.Instigator != NULL)
 	{
-		switch (C.Instigator->GetDirection()) {		//this actor moves 1 space to its direction every frame
+		switch (C.Instigator->GetDirection()) {	
 		case LEFT:AddPosition(1, 0);
 			break;
 		case RIGHT:AddPosition(-1, 0);
@@ -101,7 +103,7 @@ int Actor::SetPosition(int x, int y)
 		case DOWN:AddPosition(0, -1);
 			break;
 		}
-	}
+	}*/
 	CheckBoundaries();	//check if you are still inside the map
 	return 0;
 
@@ -117,8 +119,9 @@ int Actor::AddPosition(int dx, int dy)
 	if (C.Instigator !=NULL && !C.Instigator->isMobile())			//if movement causes collision push actor back
 	{
 		SetPosition(tempx,tempy);	//undo the movement if you are colliding
+		return 0;
 	}
-
+	m_position.onScreenPos = m_position.x + m_position.y*nScreenWidth;
 
 	CheckBoundaries();//check if you are still inside the map
 	return 0;

@@ -14,7 +14,7 @@ int main()
 {
 
 	nScreenWidth = 120;
-	nScreenHeight = 40;
+	nScreenHeight = 30;
 
 	std::thread Game(GameLoop);
 	std::thread MusicBox(MusicThreadEntry);

@@ -96,7 +96,7 @@ public:
 	void ActorTick() {
 		if (ShouldItTick())
 		{
-			g_Engine->AppendToActors(new O(GetPosition().x, GetPosition().y+1, L'ʚ', 5, DOWN, FOREGROUND_INTENSITY | FOREGROUND_RED | BACKGROUND,TRUE,FALSE));
+			g_Engine->AppendToActors(new O(GetPosition().x, GetPosition().y, L'ʚ', 5, DOWN, FOREGROUND_INTENSITY | FOREGROUND_RED | BACKGROUND,TRUE,FALSE));
 		}
 
 	}
