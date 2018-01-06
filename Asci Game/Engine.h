@@ -14,7 +14,7 @@
 #include <thread>
 #include "List.h"
 
-double fpslock = 50; //max fps (game speed)
+double fpslock = 150; //max fps (game speed)
 int delayMultip = 1;
 
 #define  LPSTR          char*						//just to be safe about CreateConsoleBuffer
