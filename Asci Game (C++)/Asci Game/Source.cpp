@@ -1,5 +1,5 @@
 
-#define BACKGROUND NULL
+#define BACKGROUND 0
 int nScreenWidth = 120;
 int nScreenHeight = 30;
 
