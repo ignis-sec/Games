@@ -17,4 +17,8 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+<<<<<<< HEAD
 >>>>>>> snake/master
+=======
+>>>>>>> spider/master
+>>>>>>> spider
