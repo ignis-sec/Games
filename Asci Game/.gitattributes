@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# Auto detect text files and perform LF normalization
-* text=auto
-=======
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
@@ -65,4 +61,3 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
->>>>>>> AG/master
