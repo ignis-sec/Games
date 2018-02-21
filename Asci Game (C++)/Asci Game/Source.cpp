@@ -19,7 +19,7 @@ int main()
 	std::thread Game(GameLoop);
 	std::thread MusicBox(MusicThreadEntry);
 
-	
+
 
 	Game.join();
 	MusicBox.join();
@@ -40,6 +40,6 @@ void GameLoop()
 	}
 }
 void MusicThreadEntry() {
-	while(1)
-	PlaySound(TEXT("music.wav"), NULL, SND_FILENAME);
+	while (1)
+		PlaySound(TEXT("music.wav"), NULL, SND_FILENAME);
 }

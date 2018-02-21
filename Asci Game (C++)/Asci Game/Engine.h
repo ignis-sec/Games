@@ -38,7 +38,7 @@ struct s_position {
 };
 typedef struct s_position position;
 
-enum Direction { RIGHT=0, UP=1, LEFT=2, DOWN=3 ,FLAG};
+enum Direction { RIGHT = 0, UP = 1, LEFT = 2, DOWN = 3, FLAG };
 
 struct s_Collision {
 	Direction Direction;
@@ -59,8 +59,8 @@ public:
 	void FrameTEntry(struct s_node* cur);
 	void ComposeTitle(double framelength);
 private:
-	
-	CHAR_INFO *screenChar;
+
+	CHAR_INFO * screenChar;
 	wchar_t *screen;
 	WORD* screenatb;
 	HANDLE hConsole;
@@ -69,11 +69,11 @@ private:
 	int m_nScreenWidth;
 	int m_nScreenHeight;
 };
- Actors g_AllActors;
- AsciiEngine* g_Engine;
+Actors g_AllActors;
+AsciiEngine* g_Engine;
 #include "Actor.h"
 
- /////////////////////
+/////////////////////
 AsciiEngine::AsciiEngine(int nScreenWidth, int nScreenHeight)
 {
 	//this creates screen Buffer 
@@ -94,12 +94,12 @@ void AsciiEngine::StartGame() {
 	double framelength = 0;
 	double frameDelay = (double)1000.0 / (double)fpslock;
 	int totalframes = 0;
-	
-	while (g_HP>0)			//basically game loop
+
+	while (g_HP > 0)			//basically game loop
 	{
 		clock_t begin = clock();
 		std::thread title(&AsciiEngine::ComposeTitle, this, framelength);
-		std::thread delay(Sleep,frameDelay);
+		std::thread delay(Sleep, frameDelay);
 		totalframes++;
 		tick();					//plays every actors ActorTick
 		ComposeFrame();			//creates screen buffer
@@ -185,9 +185,9 @@ void AsciiEngine::ComposeFrame()
 
 void AsciiEngine::FrameTEntry(struct s_node* cur)
 {
-		int pos = cur->thisActor->GetPosition().onScreenPos;
-		screen[pos] = cur->thisActor->GetTag(); //set position of actor to its tag
-		screenatb[pos] = cur->thisActor->GetAttribute();	//and its attribute
+	int pos = cur->thisActor->GetPosition().onScreenPos;
+	screen[pos] = cur->thisActor->GetTag(); //set position of actor to its tag
+	screenatb[pos] = cur->thisActor->GetAttribute();	//and its attribute
 }
 /////////////////////
 

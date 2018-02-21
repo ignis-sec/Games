@@ -5,7 +5,7 @@
 class Actor {
 public:
 
-	Actor(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable,bool bCollidable);
+	Actor(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable, bool bCollidable);
 
 	virtual void ActorTick() {};
 	virtual Collision checkCollision();
@@ -22,7 +22,7 @@ public:
 	int getLife() { return m_life; }
 	void incrementLife() { m_life++; }
 	int getNFrames() { return m_nFrames; }
-	bool ShouldItTick() { incrementLife(); return !(m_life%(m_nFrames*delayMultip)); }
+	bool ShouldItTick() { incrementLife(); return !(m_life % (m_nFrames*delayMultip)); }
 	void setAttribute(WORD ATT) { m_Attribute = ATT; }
 	void illShowMyselfOut();
 	void CheckBoundaries();
@@ -41,7 +41,7 @@ private:
 };
 
 /////////////////////////
-Actor::Actor(int x, int y, wchar_t tag,int delay, Direction Direction, WORD Attribute,bool bPushable, bool bCollidable)
+Actor::Actor(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable, bool bCollidable)
 {
 	SetPosition(x, y);
 	m_tag = tag;
@@ -69,15 +69,15 @@ Collision Actor::checkCollision()
 	while (cur != NULL)	//traverse the list until the end
 	{
 		if (this->GetPosition().x == cur->thisActor->GetPosition().x)		//for collision both current actor and node should have
-			if(this->GetPosition().y == cur->thisActor->GetPosition().y) 		//same x,y and different adress pointer
-				if(this != cur->thisActor)
-		{
-			C.Instigator = cur->thisActor;		//set the other actor as collision instigator
-			C.Direction = this->GetDirection();	//set collision direction
-			if(C.Instigator->isCollidable())
-				OnCollision(C);						//do OnCollision actions if any
-			return C;
-		}
+			if (this->GetPosition().y == cur->thisActor->GetPosition().y) 		//same x,y and different adress pointer
+				if (this != cur->thisActor)
+				{
+					C.Instigator = cur->thisActor;		//set the other actor as collision instigator
+					C.Direction = this->GetDirection();	//set collision direction
+					if (C.Instigator->isCollidable())
+						OnCollision(C);						//do OnCollision actions if any
+					return C;
+				}
 		cur = cur->next;	//to next node
 	}
 	return C;
@@ -93,7 +93,7 @@ int Actor::SetPosition(int x, int y)
 	/*Collision C = checkCollision();			//set position check collision
 	if (C.Instigator != NULL)
 	{
-		switch (C.Instigator->GetDirection()) {	
+		switch (C.Instigator->GetDirection()) {
 		case LEFT:AddPosition(1, 0);
 			break;
 		case RIGHT:AddPosition(-1, 0);
@@ -116,9 +116,9 @@ int Actor::AddPosition(int dx, int dy)
 	m_position.x += dx;
 	m_position.y += dy;
 	Collision C = checkCollision();
-	if (C.Instigator !=NULL && !C.Instigator->isMobile())			//if movement causes collision push actor back
+	if (C.Instigator != NULL && !C.Instigator->isMobile())			//if movement causes collision push actor back
 	{
-		SetPosition(tempx,tempy);	//undo the movement if you are colliding
+		SetPosition(tempx, tempy);	//undo the movement if you are colliding
 		return 0;
 	}
 	m_position.onScreenPos = m_position.x + m_position.y*nScreenWidth;
@@ -130,7 +130,7 @@ int Actor::AddPosition(int dx, int dy)
 
 void Actor::illShowMyselfOut()		//destroy actor
 {
-	struct s_node* prev = g_AllActors.head, *cur= g_AllActors.head->next;
+	struct s_node* prev = g_AllActors.head, *cur = g_AllActors.head->next;
 	if (prev->thisActor == this)		//if its the first one in linked list 
 	{
 		g_AllActors.head = g_AllActors.head->next;
@@ -151,7 +151,7 @@ void Actor::illShowMyselfOut()		//destroy actor
 }
 void Actor::CheckBoundaries()	//this function checks if actor is still within the map
 {
-	if (GetPosition().x <0 || GetPosition().y <0 || GetPosition().x >nScreenWidth-1 || GetPosition().y >nScreenHeight-1)
+	if (GetPosition().x <0 || GetPosition().y <0 || GetPosition().x >nScreenWidth - 1 || GetPosition().y >nScreenHeight - 1)
 	{
 		illShowMyselfOut();
 	}

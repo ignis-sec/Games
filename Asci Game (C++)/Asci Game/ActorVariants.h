@@ -20,10 +20,10 @@ public:
 				break;
 			}
 		}
-		
+
 	}
 
-	void OnCollision(Collision C){
+	void OnCollision(Collision C) {
 		if (C.Instigator == (Actor*)ThisPlayer)
 		{
 			C.Instigator = this;		//if you hit player tell it you are the instigator and forward the collision struct
@@ -82,8 +82,8 @@ public:
 			C.Instigator = this;		//if you hit player tell it you are the instigator and forward the collision struct
 			ThisPlayer->OnCollision(C);
 		}
-			illShowMyselfOut();
-			return;
+		illShowMyselfOut();
+		return;
 	}
 };
 
@@ -96,7 +96,7 @@ public:
 	void ActorTick() {
 		if (ShouldItTick())
 		{
-			g_Engine->AppendToActors(new O(GetPosition().x, GetPosition().y, L'ʚ', 5, DOWN, FOREGROUND_RED | BACKGROUND,TRUE,FALSE));
+			g_Engine->AppendToActors(new O(GetPosition().x, GetPosition().y, L'ʚ', 5, DOWN, FOREGROUND_RED | BACKGROUND, TRUE, FALSE));
 		}
 
 	}
@@ -112,12 +112,12 @@ public:
 	//Q(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute, bool bPushable) : Actor(x, y, tag, delay, Direction, Attribute, bPushable) {  } //inherits constructor from Actor base class
 	using Actor::Actor;
 	void ActorTick() {
-	
+
 	}
 
 	void OnCollision(Collision C) {
 		bool bObstructed = FALSE;
-		int x=GetPosition().x, y = GetPosition().y;
+		int x = GetPosition().x, y = GetPosition().y;
 		switch (C.Direction) {		//get the position you are being tried to pushed to
 		case LEFT:x--;
 			break;
@@ -151,7 +151,7 @@ public:
 					bObstructed = TRUE;
 					break;
 				}
-				
+
 				cur = cur->next;	//to next node
 			}
 			if (!bObstructed) {			//and undo the movement you did
@@ -167,7 +167,7 @@ public:
 				}
 			}
 		}
-		
+
 	}
 private:
 

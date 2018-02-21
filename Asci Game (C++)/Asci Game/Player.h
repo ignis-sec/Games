@@ -3,8 +3,8 @@
 
 class Player : public Actor {
 public:
-	bool bKeyRight = FALSE, bKeyLeft = FALSE, bKeyDown = FALSE, bKeyUp=FALSE;	//bools that keep key presses
-	Player(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute) : Actor(x, y, tag, delay, Direction, Attribute,FALSE,TRUE) { g_HP = getHP(); ThisPlayer = this; } //inherits constructor from Actor base class
+	bool bKeyRight = FALSE, bKeyLeft = FALSE, bKeyDown = FALSE, bKeyUp = FALSE;	//bools that keep key presses
+	Player(int x, int y, wchar_t tag, int delay, Direction Direction, WORD Attribute) : Actor(x, y, tag, delay, Direction, Attribute, FALSE, TRUE) { g_HP = getHP(); ThisPlayer = this; } //inherits constructor from Actor base class
 	void ActorTick() {
 		if (ShouldItTick())
 		{
@@ -12,9 +12,9 @@ public:
 			bKeyLeft = (0x8000 & GetAsyncKeyState((unsigned char)('\x25'))) != 0;
 			bKeyUp = (0x8000 & GetAsyncKeyState((unsigned char)('\x26'))) != 0;
 			bKeyDown = (0x8000 & GetAsyncKeyState((unsigned char)('\x28'))) != 0;
-			if (!(getLife() % getNFrames()*2))	//it compensates for aspect ratio of console window
+			if (!(getLife() % getNFrames() * 2))	//it compensates for aspect ratio of console window
 			{
-				if (bKeyUp) {						
+				if (bKeyUp) {
 					SetDirection(UP); AddPosition(0, -1);
 				}
 				if (bKeyDown) {
@@ -50,14 +50,16 @@ public:
 		}
 	}
 
-	void OnCollision(Collision C) {	
+	void OnCollision(Collision C) {
 		if (getFramesNotHit() > 25)	//you cant get hit twice in consequtive 25 frames
 		{
 			if (
 				C.Instigator->GetTag() != L'#' &&	//theese tagged units dont damage you.
 				C.Instigator->GetTag() != L'T' &&
 				C.Instigator->GetTag() != L'ǒ'
-				) { decreaseHP(); }	
+				) {
+				decreaseHP();
+			}
 
 			if (C.Instigator->isMobile())
 			{
